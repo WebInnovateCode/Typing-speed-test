@@ -3,29 +3,47 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="style.css" />
         <title>Typing Speed Test</title>
         <script type="module" src="./script.js"></script>
     </head>
     <body>
-        <header>
-            <picture>
-                <source
-                    srcset="./assets/images/logo-large.svg"
-                    type="image/svg+xml"
-                    media="(min-width: 376px)"
-                />
-                <source
-                    srcset="./assets/images/logo-small.svg"
-                    type="image/svg+xml"
-                />
-                <img
-                    src="./assets/images/logo-large.svg"
-                    alt="Typing Speed Test"
-                />
-            </picture>
-            <h1 class="sr-only">Typing Speed Test</h1>
-            <p class="sr-only">Train as fast as you can in 60 seconds</p>
-        </header>
+        <div class="wrapper">
+            <header class="header">
+                <div>
+                    <picture>
+                        <source
+                            srcset="./assets/images/logo-large.svg"
+                            type="image/svg+xml"
+                            media="(min-width: 376px)"
+                        />
+                        <source
+                            srcset="./assets/images/logo-small.svg"
+                            type="image/svg+xml"
+                        />
+                        <img
+                            src="./assets/images/logo-large.svg"
+                            alt="Typing Speed Test"
+                        />
+                    </picture>
+                    <h1 class="sr-only">Typing Speed Test</h1>
+                    <p class="sr-only">Type as fast as you can in 60 seconds</p>
+                </div>
+                <div class="personal-best">
+                    <img
+                        src="./assets/images/icon-personal-best.svg"
+                        alt="Gold Trophy"
+                    />
+                    Personal best:
+                    <span class="personal-best__wpm">--</span> WPM
+                </div>
+            </header>
+        </div>
     </body>
 </html>
