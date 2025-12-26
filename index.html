@@ -3,8 +3,29 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <link rel="stylesheet" href="style.css" />
+        <title>Typing Speed Test</title>
         <script type="module" src="./script.js"></script>
     </head>
-    <body></body>
+    <body>
+        <header>
+            <picture>
+                <source
+                    srcset="./assets/images/logo-large.svg"
+                    type="image/svg+xml"
+                    media="(min-width: 376px)"
+                />
+                <source
+                    srcset="./assets/images/logo-small.svg"
+                    type="image/svg+xml"
+                />
+                <img
+                    src="./assets/images/logo-large.svg"
+                    alt="Typing Speed Test"
+                />
+            </picture>
+            <h1 class="sr-only">Typing Speed Test</h1>
+            <p class="sr-only">Train as fast as you can in 60 seconds</p>
+        </header>
+    </body>
 </html>
