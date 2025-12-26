@@ -18,15 +18,38 @@ body {
 .header {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-content: center;
     padding-inline: 2rem;
     padding-block: 2rem;
+    @media only screen and (width >= 376px) and (width < 548px) {
+        & {
+            justify-content: center;
+        }
+    }
 }
 
 .personal-best {
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
+}
+
+.personal-best__label--desktop {
+    @media only screen and (width < 376px) {
+        & {
+            display: none;
+        }
+    }
+}
+
+.personal-best__label--mobile {
+    @media only screen and (width >= 376px) {
+        & {
+            display: none;
+        }
+    }
 }
 
 .personal-best__wpm {
