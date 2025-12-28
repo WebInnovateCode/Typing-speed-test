@@ -44,9 +44,65 @@
                         Personal best:
                     </span>
                     <span class="personal-best__label--mobile"> Best: </span>
-                    <span class="personal-best__wpm">--</span> WPM
+                    <span class="personal-best__wpm">-- WPM</span>
                 </div>
             </header>
+            <main>
+                <section aria-labelledby="live-stats">
+                    <h2 id="live-stats" class="sr-only">Live Stats</h2>
+                    <div class="stats-wrapper">
+                        <ul class="stats">
+                            <li class="stats__item stats__item--pr">
+                                <span class="stats__label">WPM:</span>
+                                <output class="stats__value">--</output>
+                            </li>
+                            <li class="stats__item stats__item--px">
+                                <span class="stats__label">Accuracy:</span>
+                                <output class="stats__value">--</output>
+                            </li>
+                            <li class="stats__item--pl">
+                                <span class="stats__label">Time:</span>
+                                <time class="stats__value" datetime="PT60S">
+                                    1:00
+                                </time>
+                            </li>
+                        </ul>
+                        <ul class="stats">
+                            <li class="stats__item stats__item--pr">
+                                <span class="stats__label stats__label--sm"
+                                    >Difficulty:</span
+                                >
+                                <button
+                                    class="button button--active"
+                                    type="button"
+                                >
+                                    Easy
+                                </button>
+                                <button class="button" type="button">
+                                    Medium
+                                </button>
+                                <button class="button" type="button">
+                                    Hard
+                                </button>
+                            </li>
+                            <li class="stats__item--pl">
+                                <span class="stats__label stats__label--sm"
+                                    >Mode:</span
+                                >
+                                <button
+                                    class="button button--active"
+                                    type="button"
+                                >
+                                    Timed(60s)
+                                </button>
+                                <button class="button" type="button">
+                                    Passage
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
         </div>
     </body>
 </html>

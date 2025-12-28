@@ -2,62 +2,155 @@
     --color-background-primary: hsl(0, 0%, 7%);
     --color-text-primary: hsl(240, 1%, 59%);
     --color-white: hsl(0, 0%, 100%);
+    --color-background-button-active: hsl(214, 100%, 55%);
+    --color-background-button-hover: hsl(0, 0%, 15%);
+    --neutral-800: hsl(0, 0%, 15%);
+    --neutral-500: hsl(240, 3%, 46%);
+    --blue-600: hsl(214, 100%, 55%);
+    --blue-400: hsl(210, 100%, 65%);
+    --red-500: hsl(354, 63%, 57%);
+    --green-500: hsl(140, 63%, 57%);
+    --yellow-400: hsl(49, 85%, 70%);
+    --font-family: "Sora", Verdana, Geneva, Tahoma, sans-serif;
+    --section-spacing: clamp(0.25rem, 0.04rem + 1.07vw, 1rem)
+        clamp(0.25rem, -0.54rem + 3.93vw, 3rem);
 }
 
 body {
     margin: 0;
     padding: 0;
-    color: var(--color-text-primary);
-    font-family: "Sora", Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .wrapper {
     background-color: var(--color-background-primary);
+    padding: var(--section-spacing);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: center;
-    padding-inline: 2rem;
-    padding-block: 2rem;
-    @media only screen and (width >= 376px) and (width < 548px) {
-        & {
-            justify-content: center;
+@layer header {
+    .header {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: var(--section-spacing);
+        @media only screen and (width >= 376px) and (width < 528px) {
+            & {
+                justify-content: center;
+            }
         }
+    }
+
+    .personal-best {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+
+    .personal-best__label--desktop {
+        @media only screen and (width < 376px) {
+            & {
+                display: none;
+            }
+        }
+    }
+
+    .personal-best__label--mobile {
+        @media only screen and (width >= 376px) {
+            & {
+                display: none;
+            }
+        }
+    }
+
+    .personal-best__wpm {
+        color: var(--color-white);
     }
 }
 
-.personal-best {
-    display: flex;
-    align-items: center;
-    column-gap: 0.5rem;
-}
-
-.personal-best__label--desktop {
-    @media only screen and (width < 376px) {
-        & {
-            display: none;
+@layer stats {
+    .stats-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: var(--section-spacing);
+        border-bottom: 1px solid var(--neutral-500);
+        @media only screen and (width >= 376px) and (width < 627px) {
+            & {
+                justify-content: center;
+            }
         }
+    }
+
+    .stats {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        padding: 0;
+        @media only screen and (width < 627px) {
+            & {
+                justify-content: center;
+            }
+        }
+    }
+
+    .stats__item {
+        border-right: 1px solid var(--neutral-500);
+    }
+
+    .stats__item--pr {
+        padding-right: 1rem;
+    }
+
+    .stats__item--px {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    .stats__item--pl {
+        padding-left: 1rem;
+    }
+
+    .stats__label {
+        margin-right: 0.5rem;
+    }
+
+    .stats__label--sm {
+        font-size: 0.9rem;
+    }
+
+    .stats__value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--color-white);
     }
 }
 
-.personal-best__label--mobile {
-    @media only screen and (width >= 376px) {
-        & {
-            display: none;
-        }
+@layer button {
+    .button {
+        background-color: transparent;
+        color: var(--color-white);
+        border: 1px solid var(--color-text-primary);
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .button:focus {
+        outline: 1.5px solid var(--blue-400);
+        outline-offset: 1px;
+    }
+
+    .button--active,
+    .button:hover {
+        background-color: var(--blue-600);
+        border: initial;
     }
 }
 
-.personal-best__wpm {
-    color: var(--color-white);
-}
-
-.sr-only,
-.sr-only-focusable:not(:focus, :focus-within) {
+.sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
