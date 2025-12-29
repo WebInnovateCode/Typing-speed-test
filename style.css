@@ -150,6 +150,40 @@ body {
     }
 }
 
+@layer test {
+    .test {
+        display: grid;
+        grid-template-areas: overlay;
+        padding: var(--section-spacing);
+    }
+
+    .test__passage {
+        font-size: 1.6rem;
+        margin: 0;
+        padding: 0;
+        grid-area: overlay;
+    }
+
+    .test__grid-item {
+        grid-area: overlay;
+    }
+
+    .test__input {
+        box-sizing: border-box;
+        width: 100%;
+        field-sizing: content;
+        background-color: transparent;
+        border: none;
+        color: transparent;
+        font-size: 1.6rem;
+        resize: none;
+        overflow-y: hidden;
+        padding: 0;
+        margin: 0;
+        font-family: var(--font-family);
+    }
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -160,4 +194,12 @@ body {
     clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
+}
+
+.correct {
+    color: var(--green-500);
+}
+
+.incorrect {
+    color: var(--red-500);
 }
