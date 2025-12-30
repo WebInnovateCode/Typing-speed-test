@@ -1,3 +1,5 @@
+import { getPassage } from "./test.js";
+
 export function addEventListenertoElement(element, type = "click", handler) {
     element.addEventListener(type, handler);
 }
@@ -30,4 +32,11 @@ export function persistCountForHandler() {
             passageParagraph.lastChild.replaceWith(passage.slice(++count));
         }
     };
+}
+
+export function handleDifficulty(element, jsonData, event) {
+    element.textContent = getPassage(
+        jsonData,
+        event.target.attributes["data-difficulty"].value,
+    );
 }
