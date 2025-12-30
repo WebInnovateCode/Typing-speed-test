@@ -1,4 +1,5 @@
 import { getPassage } from "./test.js";
+import { startTimer } from "./test.js";
 
 export function addEventListenertoElement(element, type = "click", handler) {
     element.addEventListener(type, handler);
@@ -6,12 +7,18 @@ export function addEventListenertoElement(element, type = "click", handler) {
 
 export function persistCountForHandler() {
     let count = 0;
+    let beginTimer = false;
     return function handleKeydownEvent(
         passageParagraph,
         passage,
         spanElement,
         event,
     ) {
+        if (!beginTimer) {
+            startTimer();
+            beginTimer = true;
+        }
+
         if (event.key === "Backspace") {
             if (count > 0) {
                 passageParagraph.lastElementChild.remove();
@@ -39,4 +46,8 @@ export function handleDifficulty(element, jsonData, event) {
         jsonData,
         event.target.attributes["data-difficulty"].value,
     );
+    document
+        .querySelector(".button--active")
+        .classList.remove("button--active");
+    event.target.classList.add("button--active");
 }
