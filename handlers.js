@@ -1,4 +1,4 @@
-import { getPassage, startTimer, setWPM } from "./test.js";
+import { getPassage, startTimer, setWPM, setAccuracy } from "./test.js";
 
 export function addEventListenertoElement(element, type = "click", handler) {
     element.addEventListener(type, handler);
@@ -9,6 +9,8 @@ export function persistCountForHandler() {
     let beginTimer = false;
     let numberOfWords = 0;
     let elapsedTime;
+    let totalCharactersTyped = 0;
+    let numberOfIncorrect = 0;
     return function handleKeydownEvent(
         passageParagraph,
         passage,
@@ -32,10 +34,18 @@ export function persistCountForHandler() {
         ) {
             const cloneSpanElement = spanElement.cloneNode(true);
             cloneSpanElement.textContent = passage[count];
-            event.key === passage[count] ||
-            (event.key === "-" && passage[count] === "\u2014")
-                ? cloneSpanElement.classList.add("correct")
-                : cloneSpanElement.classList.add("incorrect");
+
+            if (
+                event.key === passage[count] ||
+                (event.key === "-" && passage[count] === "\u2014")
+            ) {
+                cloneSpanElement.classList.add("correct");
+            } else {
+                cloneSpanElement.classList.add("incorrect");
+                numberOfIncorrect += 1;
+            }
+
+            totalCharactersTyped += 1;
             passageParagraph.lastChild.before(cloneSpanElement);
             passageParagraph.lastChild.replaceWith(passage.slice(++count));
         }
@@ -43,6 +53,7 @@ export function persistCountForHandler() {
         if (passage[count] === " ") {
             numberOfWords += 1;
             setWPM(numberOfWords, elapsedTime());
+            setAccuracy(totalCharactersTyped, numberOfIncorrect);
         }
     };
 }

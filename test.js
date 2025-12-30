@@ -41,3 +41,9 @@ export function setWPM(numberOfWords, timeElapsed) {
         numberOfWords * (60 / timeElapsed),
     );
 }
+
+export function setAccuracy(totalCharactersTyped, numberOfIncorrect) {
+    document.querySelector("[data-accuracy").textContent =
+        Math.round(100 - (numberOfIncorrect / totalCharactersTyped) * 100) +
+        "%";
+}
