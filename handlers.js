@@ -1,5 +1,4 @@
-import { getPassage } from "./test.js";
-import { startTimer } from "./test.js";
+import { getPassage, startTimer, setWPM } from "./test.js";
 
 export function addEventListenertoElement(element, type = "click", handler) {
     element.addEventListener(type, handler);
@@ -8,6 +7,8 @@ export function addEventListenertoElement(element, type = "click", handler) {
 export function persistCountForHandler() {
     let count = 0;
     let beginTimer = false;
+    let numberOfWords = 0;
+    let elapsedTime;
     return function handleKeydownEvent(
         passageParagraph,
         passage,
@@ -15,7 +16,7 @@ export function persistCountForHandler() {
         event,
     ) {
         if (!beginTimer) {
-            startTimer();
+            elapsedTime = startTimer();
             beginTimer = true;
         }
 
@@ -37,6 +38,11 @@ export function persistCountForHandler() {
                 : cloneSpanElement.classList.add("incorrect");
             passageParagraph.lastChild.before(cloneSpanElement);
             passageParagraph.lastChild.replaceWith(passage.slice(++count));
+        }
+
+        if (passage[count] === " ") {
+            numberOfWords += 1;
+            setWPM(numberOfWords, elapsedTime());
         }
     };
 }

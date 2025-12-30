@@ -10,12 +10,14 @@ export function getPassage(jsonData, difficulty) {
 export function startTimer() {
     let start = 0;
     let request;
+    let currentTime;
 
     function timer(timestamp) {
         if (start === 0) {
             start = timestamp;
         }
 
+        currentTime = timestamp;
         const elapsed = (timestamp - start) / 1000;
         document.querySelector("time").textContent =
             Math.ceil(60 - elapsed) + "s";
@@ -28,4 +30,14 @@ export function startTimer() {
     }
 
     request = requestAnimationFrame(timer);
+
+    return function getElapsedTime() {
+        return Math.ceil((currentTime - start) / 1000);
+    };
+}
+
+export function setWPM(numberOfWords, timeElapsed) {
+    document.querySelector("[data-wpm]").textContent = Math.round(
+        numberOfWords * (60 / timeElapsed),
+    );
 }
