@@ -1,70 +1,87 @@
-import { getPassage, startTimer, setWPM, setAccuracy } from "./test.js";
+import { currentTypingSpeedTest } from "./test.js";
+import { element } from "./element.js";
 
-export function addEventListenertoElement(element, type = "click", handler) {
-    element.addEventListener(type, handler);
-}
+export const { element: passageInput } = element(
+    "#passage",
+    "keydown",
+    trackStats(),
+);
 
-export function persistCountForHandler() {
+export const { element: passageText } = element(".test__passage");
+
+(() => {
+    for (const difficulty of ["easy", "medium", "hard"]) {
+        element(`[data-difficulty="${difficulty}"]`, "click", handleDifficulty);
+    }
+
+    element("#mode", "change", handleMode);
+})();
+
+function trackStats() {
     let count = 0;
-    let beginTimer = false;
     let numberOfWords = 0;
-    let elapsedTime;
     let totalCharactersTyped = 0;
     let numberOfIncorrect = 0;
-    return function handleKeydownEvent(
-        passageParagraph,
-        passage,
-        spanElement,
-        event,
-    ) {
-        if (!beginTimer) {
-            elapsedTime = startTimer();
-            beginTimer = true;
+    let timer = currentTypingSpeedTest.startTimer();
+    let passage;
+    const { element: wpmElement } = element("[data-wpm]");
+    const { element: accuracyElement } = element("[data-accuracy]");
+
+    return function handleKeydownEvent(event) {
+        const currentCharacterSpan = passageText.children[count];
+        if (timer.startTime() === 0) {
+            passage = currentTypingSpeedTest.getCurrentPassage();
+            timer.start();
         }
 
         if (event.key === "Backspace") {
-            if (count > 0) {
-                passageParagraph.lastElementChild.remove();
-                passageParagraph.lastChild.replaceWith(passage.slice(--count));
-            }
+            if (count > 0) passageText.children[--count].className = "";
         } else if (
             event.key !== "CapsLock" &&
             event.key !== "Shift" &&
             event.key !== "Escape"
         ) {
-            const cloneSpanElement = spanElement.cloneNode(true);
-            cloneSpanElement.textContent = passage[count];
+            if (passage[count] === " ") {
+                numberOfWords += 1;
+                wpmElement.textContent = currentTypingSpeedTest.setWPM(
+                    numberOfWords,
+                    timer.getElapsedTime(),
+                );
+                accuracyElement.textContent =
+                    currentTypingSpeedTest.setAccuracy(
+                        totalCharactersTyped,
+                        numberOfIncorrect,
+                    ) + "%";
+            }
 
             if (
                 event.key === passage[count] ||
                 (event.key === "-" && passage[count] === "\u2014")
             ) {
-                cloneSpanElement.classList.add("correct");
+                currentCharacterSpan.classList.add("correct");
             } else {
-                cloneSpanElement.classList.add("incorrect");
+                currentCharacterSpan.classList.add("incorrect");
                 numberOfIncorrect += 1;
             }
 
             totalCharactersTyped += 1;
-            passageParagraph.lastChild.before(cloneSpanElement);
-            passageParagraph.lastChild.replaceWith(passage.slice(++count));
-        }
-
-        if (passage[count] === " ") {
-            numberOfWords += 1;
-            setWPM(numberOfWords, elapsedTime());
-            setAccuracy(totalCharactersTyped, numberOfIncorrect);
+            count += 1;
         }
     };
 }
 
-export function handleDifficulty(element, jsonData, event) {
-    element.textContent = getPassage(
-        jsonData,
+function handleDifficulty(event) {
+    const { element: activeButton } = element(".button--active");
+    currentTypingSpeedTest.setSinglePassage(
         event.target.attributes["data-difficulty"].value,
     );
-    document
-        .querySelector(".button--active")
-        .classList.remove("button--active");
+    currentTypingSpeedTest.insertPassageWithCharacterSpan(passageText);
+    activeButton.classList.remove("button--active");
     event.target.classList.add("button--active");
+    passageInput.style.height = "auto";
+    passageInput.style.height = passageText.scrollHeight + "px";
+}
+
+function handleMode(event) {
+    currentTypingSpeedTest.setMode(event.target.value);
 }

@@ -153,8 +153,8 @@ body {
 @layer test {
     .test {
         display: grid;
-        grid-template-areas: overlay;
         padding: var(--section-spacing);
+        grid-template-areas: "overlay";
     }
 
     .test__passage {

@@ -99,18 +99,19 @@
                                 </button>
                             </li>
                             <li class="stats__item--pl">
-                                <span class="stats__label stats__label--sm"
-                                    >Mode:</span
+                                <label
+                                    class="stats__label stats__label--sm"
+                                    for="mode"
                                 >
-                                <button
-                                    class="button button--active"
-                                    type="button"
-                                >
-                                    Timed(60s)
-                                </button>
-                                <button class="button" type="button">
-                                    Passage
-                                </button>
+                                    Mode:
+                                </label>
+                                <select name="mode" id="mode">
+                                    <option value="60">60s</option>
+                                    <option value="45">45s</option>
+                                    <option value="30">30s</option>
+                                    <option value="15">15s</option>
+                                    <option value="passage">Passage</option>
+                                </select>
                             </li>
                         </ul>
                     </div>
