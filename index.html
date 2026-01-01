@@ -66,7 +66,11 @@
                             </li>
                             <li class="stats__item--pl">
                                 <span class="stats__label">Time:</span>
-                                <time class="stats__value" datetime="PT60S">
+                                <time
+                                    class="stats__value"
+                                    datetime="PT60S"
+                                    data-time="60"
+                                >
                                     60s
                                 </time>
                             </li>
@@ -132,6 +136,13 @@
                         </div>
                     </div>
                 </section>
+                <dialog>
+                    <span data-result-wpm=""></span>
+                    <span data-result-accuracy=""></span>
+                    <span data-result-difficulty=""></span>
+                    <span data-result-mode=""></span>
+                    <button type="button" data-type="restart">restart</button>
+                </dialog>
             </main>
         </div>
     </body>

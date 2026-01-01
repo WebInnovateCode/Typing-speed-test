@@ -1,36 +1,44 @@
-import { currentTypingSpeedTest } from "./test.js";
+import typingSpeedTest from "./test.js";
 import { element } from "./element.js";
+import { initializeValues } from "./initializestatvalues.js";
 
-export const { element: passageInput } = element(
+const currentTest = typingSpeedTest("easy", "60");
+const {
+    initializePassageInput,
+    passageText,
+    dialogElement,
+    time: { timeElement },
+    resultOfTest: { resultWPM, resultAccuracy, resultDifficulty, resultMode },
+} = initializeValues(
+    currentTest,
     "#passage",
-    "keydown",
-    trackStats(),
+    ".test__passage",
+    "dialog",
+    "time",
+    "[data-type]",
+    {
+        wpm: "[data-result-wpm]",
+        accuracy: "[data-result-accuracy]",
+        difficulty: "[data-result-difficulty]",
+        mode: "[data-result-mode]",
+    },
 );
 
-export const { element: passageText } = element(".test__passage");
-
-(() => {
-    for (const difficulty of ["easy", "medium", "hard"]) {
-        element(`[data-difficulty="${difficulty}"]`, "click", handleDifficulty);
-    }
-
-    element("#mode", "change", handleMode);
-})();
+let { passageInput, abortController, handlerTimer } = initializePassageInput();
 
 function trackStats() {
     let count = 0;
-    let numberOfWords = 0;
     let totalCharactersTyped = 0;
     let numberOfIncorrect = 0;
-    let timer = currentTypingSpeedTest.startTimer();
+    let timer = currentTest.startTimer(timeElement, "data-time");
     let passage;
     const { element: wpmElement } = element("[data-wpm]");
     const { element: accuracyElement } = element("[data-accuracy]");
 
-    return function handleKeydownEvent(event) {
+    function handleKeydownEvent(event) {
         const currentCharacterSpan = passageText.children[count];
         if (timer.startTime() === 0) {
-            passage = currentTypingSpeedTest.getCurrentPassage();
+            passage = currentTest.getCurrentPassage();
             timer.start();
         }
 
@@ -41,18 +49,16 @@ function trackStats() {
             event.key !== "Shift" &&
             event.key !== "Escape"
         ) {
-            if (passage[count] === " ") {
-                numberOfWords += 1;
-                wpmElement.textContent = currentTypingSpeedTest.setWPM(
-                    numberOfWords,
-                    timer.getElapsedTime(),
-                );
-                accuracyElement.textContent =
-                    currentTypingSpeedTest.setAccuracy(
-                        totalCharactersTyped,
-                        numberOfIncorrect,
-                    ) + "%";
-            }
+            currentTest.setWPM(
+                totalCharactersTyped,
+                timer.getElapsedTime(),
+                wpmElement,
+            );
+            currentTest.setAccuracy(
+                totalCharactersTyped,
+                numberOfIncorrect,
+                accuracyElement,
+            );
 
             if (
                 event.key === passage[count] ||
@@ -66,22 +72,69 @@ function trackStats() {
 
             totalCharactersTyped += 1;
             count += 1;
+
+            if (count >= passage.length) {
+                showResults();
+            }
         }
+    }
+
+    return {
+        handleKeydownEvent,
+        timer,
     };
 }
 
 function handleDifficulty(event) {
     const { element: activeButton } = element(".button--active");
-    currentTypingSpeedTest.setSinglePassage(
-        event.target.attributes["data-difficulty"].value,
+    currentTest.setSinglePassage(
+        currentTest.setDifficulty(
+            event.target.attributes["data-difficulty"].value,
+        ),
     );
-    currentTypingSpeedTest.insertPassageWithCharacterSpan(passageText);
+    currentTest.insertPassageWithCharacterSpan(passageText);
     activeButton.classList.remove("button--active");
     event.target.classList.add("button--active");
+    reset();
+}
+
+function handleMode(event) {
+    currentTest.setMode(event.target.value, timeElement);
+    reset();
+}
+
+function reset() {
+    if (handlerTimer.startTime() !== 0) handlerTimer.stop();
+    timeElement.textContent = currentTest.getMode() + "s";
+    currentTest.setSinglePassage(currentTest.getDifficulty());
+    currentTest.insertPassageWithCharacterSpan(passageText);
+    abortController();
+    ({ passageInput, abortController, handlerTimer } =
+        initializePassageInput());
+    resizeInputHeight();
+}
+
+function showResults() {
+    resultWPM.textContent = currentTest.getWPM();
+    resultAccuracy.textContent = currentTest.getAccuracy() + "%";
+    resultDifficulty.textContent = currentTest.getDifficulty();
+    resultMode.textContent = currentTest.getMode() + "s";
+    dialogElement.showModal();
+    reset();
+}
+
+function resizeInputHeight() {
     passageInput.style.height = "auto";
     passageInput.style.height = passageText.scrollHeight + "px";
 }
 
-function handleMode(event) {
-    currentTypingSpeedTest.setMode(event.target.value);
-}
+export {
+    currentTest,
+    passageText,
+    trackStats,
+    handleDifficulty,
+    handleMode,
+    reset,
+    showResults,
+    resizeInputHeight,
+};
