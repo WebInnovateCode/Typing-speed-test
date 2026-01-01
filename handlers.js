@@ -118,7 +118,10 @@ function showResults() {
     resultWPM.textContent = currentTest.getWPM();
     resultAccuracy.textContent = currentTest.getAccuracy() + "%";
     resultDifficulty.textContent = currentTest.getDifficulty();
-    resultMode.textContent = currentTest.getMode() + "s";
+    resultMode.textContent =
+        currentTest.getMode() === "0"
+            ? handlerTimer.getElapsedTime() + "s"
+            : currentTest.getMode() + "s";
     dialogElement.showModal();
     reset();
 }
