@@ -44,78 +44,136 @@
                         Personal best:
                     </span>
                     <span class="personal-best__label--mobile"> Best: </span>
-                    <span class="personal-best__wpm">-- WPM</span>
+                    <span class="personal-best__wpm">40</span>WPM
                 </div>
             </header>
             <main>
                 <section aria-labelledby="live-stats">
                     <h2 id="live-stats" class="sr-only">Live Stats</h2>
-                    <div class="stats-wrapper">
-                        <ul class="stats">
-                            <li class="stats__item stats__item--pr">
-                                <span class="stats__label">WPM:</span>
-                                <output class="stats__value" data-wpm="40"
-                                    >--</output
+                    <div class="list-wrapper">
+                        <ul class="list list--col-gap">
+                            <li class="list__item list__item--flex">
+                                <span
+                                    class="list__item-label list__item-label--sm"
+                                    >Difficulty:</span
+                                >
+                                <ul class="list">
+                                    <li>
+                                        <button
+                                            class="button button--active"
+                                            type="button"
+                                            data-difficulty="easy"
+                                        >
+                                            Easy
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-difficulty="medium"
+                                        >
+                                            Medium
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-difficulty="hard"
+                                        >
+                                            Hard
+                                        </button>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list__item list__item--flex">
+                                <span
+                                    class="list__item-label list__item-label--sm"
+                                    >Mode:</span
+                                >
+                                <ul class="list">
+                                    <li>
+                                        <button
+                                            class="button button--active"
+                                            type="button"
+                                            data-mode="60"
+                                        >
+                                            60s
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-mode="45"
+                                        >
+                                            45s
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-mode="30"
+                                        >
+                                            30s
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-mode="15"
+                                        >
+                                            15s
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-mode="passage"
+                                        >
+                                            passage
+                                        </button>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="list list--col-gap">
+                            <li class="list__item--flex-col">
+                                <span
+                                    class="list__item-label list__item-label--sm sr-on"
+                                    >WPM</span
+                                >
+                                <output class="list__item-value" data-wpm="40"
+                                    >40</output
                                 >
                             </li>
-                            <li class="stats__item stats__item--px">
-                                <span class="stats__label">Accuracy:</span>
-                                <output class="stats__value" data-accuracy="94%"
-                                    >--</output
+                            <li class="list__item--flex-col">
+                                <span
+                                    class="list__item-label list__item-label--sm"
+                                    >Accuracy</span
+                                >
+                                <output
+                                    class="list__item-value"
+                                    data-accuracy="94%"
+                                    >94%</output
                                 >
                             </li>
-                            <li class="stats__item--pl">
-                                <span class="stats__label">Time:</span>
+                            <li class="list__item--flex-col">
+                                <span
+                                    class="list__item-label list__item-label--sm"
+                                    >Time</span
+                                >
                                 <time
-                                    class="stats__value"
+                                    class="list__item-value"
                                     datetime="PT60S"
                                     data-time="60"
                                 >
                                     60s
                                 </time>
-                            </li>
-                        </ul>
-                        <ul class="stats">
-                            <li class="stats__item stats__item--pr">
-                                <span class="stats__label stats__label--sm"
-                                    >Difficulty:</span
-                                >
-                                <button
-                                    class="button button--active"
-                                    type="button"
-                                    data-difficulty="easy"
-                                >
-                                    Easy
-                                </button>
-                                <button
-                                    class="button"
-                                    type="button"
-                                    data-difficulty="medium"
-                                >
-                                    Medium
-                                </button>
-                                <button
-                                    class="button"
-                                    type="button"
-                                    data-difficulty="hard"
-                                >
-                                    Hard
-                                </button>
-                            </li>
-                            <li class="stats__item--pl">
-                                <label
-                                    class="stats__label stats__label--sm"
-                                    for="mode"
-                                >
-                                    Mode:
-                                </label>
-                                <select name="mode" id="mode">
-                                    <option value="60">60s</option>
-                                    <option value="45">45s</option>
-                                    <option value="30">30s</option>
-                                    <option value="15">15s</option>
-                                    <option value="passage">Passage</option>
-                                </select>
                             </li>
                         </ul>
                     </div>
@@ -132,18 +190,85 @@
                                 class="test__input"
                                 name="passage"
                                 id="passage"
+                                spellcheck="false"
                             ></textarea>
                         </div>
                     </div>
                 </section>
-                <dialog>
-                    <span data-result-wpm=""></span>
-                    <span data-result-accuracy=""></span>
-                    <span data-result-difficulty=""></span>
-                    <span data-result-mode=""></span>
-                    <button type="button" data-type="restart">restart</button>
+                <section aria-labelledby="restart">
+                    <h2 id="restart" class="sr-only">
+                        Restart Typing Speed Test
+                    </h2>
+                    <div class="restart">
+                        <button
+                            type="button"
+                            class="button button--restart button--center"
+                        >
+                            Restart Test
+                            <img
+                                src="./assets/images/icon-restart.svg"
+                                alt="restart arrow"
+                                class="button__icon"
+                            />
+                        </button>
+                    </div>
+                </section>
+                <dialog class="dialog-results">
+                    <h2>Text Complete!</h2>
+                    <ul class="list">
+                        <li>
+                            <span class="list__item-label">WPM:</span>
+                            <output
+                                data-result-wpm=""
+                                class="list__item-value"
+                            ></output>
+                        </li>
+                        <li>
+                            <span class="list__item-label">Accuracy:</span>
+                            <output
+                                data-result-accuracy=""
+                                class="list__item-value"
+                            ></output>
+                        </li>
+                        <li>
+                            <span class="list__item-label">Difficulty:</span>
+                            <span
+                                data-result-difficulty=""
+                                class="list__item-value"
+                            ></span>
+                        </li>
+                        <li>
+                            <span class="list__item-label">Mode:</span>
+                            <span
+                                data-result-mode=""
+                                class="list__item-value"
+                            ></span>
+                        </li>
+                    </ul>
+                    <button
+                        type="button"
+                        class="button button--restart button--center"
+                        data-type="restart"
+                    >
+                        Go again!
+                        <img
+                            src="./assets/images/icon-restart.svg"
+                            alt="restart arrow"
+                        />
+                    </button>
                 </dialog>
             </main>
+            <footer class="footer">
+                <div class="attribution">
+                    Challenge by
+                    <a
+                        class="attribution__link"
+                        href="https://www.frontendmentor.io?ref=challenge"
+                        >Frontend Mentor</a
+                    >. Coded by
+                    <a class="attribution__link" href="#">Marc Mansour.
+                </div>
+            </footer>
         </div>
     </body>
 </html>

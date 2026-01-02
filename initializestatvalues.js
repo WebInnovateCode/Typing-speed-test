@@ -28,7 +28,9 @@ export function initializeValues(
             );
         }
 
-        element("#mode", "change", handleMode);
+        for (const mode of ["60", "45", "30", "15", "passage"]) {
+            element(`[data-mode="${mode}"]`, "click", handleMode);
+        }
     })();
 
     return {

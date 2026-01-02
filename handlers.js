@@ -86,7 +86,9 @@ function trackStats() {
 }
 
 function handleDifficulty(event) {
-    const { element: activeButton } = element(".button--active");
+    const { element: activeButton } = element(
+        ".button--active[data-difficulty]",
+    );
     currentTest.setSinglePassage(
         currentTest.setDifficulty(
             event.target.attributes["data-difficulty"].value,
@@ -99,7 +101,10 @@ function handleDifficulty(event) {
 }
 
 function handleMode(event) {
-    currentTest.setMode(event.target.value, timeElement);
+    const { element: activeButton } = element(".button--active[data-mode]");
+    currentTest.setMode(event.target.dataset.mode, timeElement);
+    activeButton.classList.remove("button--active");
+    event.target.classList.add("button--active");
     reset();
 }
 
