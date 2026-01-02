@@ -2,18 +2,15 @@
     --color-background-primary: hsl(0, 0%, 7%);
     --color-text-primary: hsl(240, 1%, 59%);
     --color-white: hsl(0, 0%, 100%);
-    --color-background-button-active: hsl(214, 100%, 55%);
-    --color-background-button-hover: hsl(0, 0%, 15%);
-    --neutral-800: hsl(0, 0%, 15%);
-    --neutral-500: hsl(240, 3%, 46%);
-    --blue-600: hsl(214, 100%, 55%);
-    --blue-400: hsl(210, 100%, 65%);
-    --red-500: hsl(354, 63%, 57%);
-    --green-500: hsl(140, 63%, 57%);
-    --yellow-400: hsl(49, 85%, 70%);
     --font-family: "Sora", Verdana, Geneva, Tahoma, sans-serif;
     --section-spacing: clamp(0.25rem, -0.014rem + 1.13vw, 1rem)
         clamp(0.25rem, -1.78rem + 8.64vw, 6rem);
+    --font-weight-heavy: 700;
+    --neutral-800: hsl(0, 0%, 15%);
+    --neutral-500: hsl(240, 3%, 46%);
+    --red-500: hsl(354, 63%, 57%);
+    --green-500: hsl(140, 63%, 57%);
+    --yellow-400: hsl(49, 85%, 70%);
 }
 
 body {
@@ -66,7 +63,7 @@ body {
 
     .personal-best__wpm {
         color: var(--color-white);
-        font-weight: 700;
+        font-weight: var(--font-weight-heavy);
     }
 }
 
@@ -86,16 +83,20 @@ body {
         padding: 0;
     }
 
+    .list--col {
+        flex-direction: column;
+    }
+
     .list--col-gap {
         column-gap: clamp(1rem, 0.71rem + 1.43vw, 2rem);
     }
 
-    .list__item--flex {
+    .list__item--row {
         display: flex;
         align-items: center;
     }
 
-    .list__item--flex-col {
+    .list__item--col-mobile {
         @media only screen and (width < 376px) {
             & {
                 display: flex;
@@ -106,6 +107,7 @@ body {
     }
 
     .list__item-label {
+        color: var(--color-text-primary);
         margin-right: clamp(0rem, -0.14rem + 0.71vw, 0.5rem);
     }
 
@@ -115,7 +117,7 @@ body {
 
     .list__item-value {
         font-size: clamp(1rem, 0.95rem + 0.268vw, 1.2rem);
-        font-weight: 700;
+        font-weight: var(--font-weight-heavy);
         color: var(--color-white);
     }
 }
@@ -152,6 +154,12 @@ body {
         border-radius: 0.25rem;
     }
 
+    .button--bg-white,
+    .button--bg-white:hover {
+        background-color: var(--color-white);
+        color: var(--neutral-800);
+    }
+
     .button--center {
         margin: 0 auto;
     }
@@ -159,6 +167,10 @@ body {
     .button__icon {
         width: 1rem;
         height: 1rem;
+    }
+
+    .button__icon--black {
+        filter: brightness(0);
     }
 }
 
@@ -213,20 +225,56 @@ body {
 }
 
 @layer results {
-    main {
-        position: relative;
+    body:has(.dialog[open]) {
+        overflow: hidden;
     }
 
-    .dialog-results {
-        width: 100%;
-        background-image: url("./assets/images/pattern-star-1.svg"),
-            url("./assets/images/pattern-star-2.svg");
-        background-repeat: no-repeat;
-        background-position: right 10% center, top 10% left 10%;
-        background-color: var(--color-background-primary);
+    .dialog {
+        background-color: transparent;
         border: none;
-        color: var(--color-white);
         text-align: center;
+    }
+
+    .dialog--default {
+        &::backdrop {
+            background-image: url("./assets/images/pattern-star-1.svg"),
+                url("./assets/images/pattern-star-2.svg");
+            background-repeat: no-repeat;
+            background-position: right 20% center, top 20% left 20%;
+            backdrop-filter: blur(5px);
+        }
+
+        @media only screen and (width < 376px) {
+            &::backdrop {
+                background-position: right 10% center, top 10% left 10%;
+            }
+        }
+    }
+
+    .dialog--best::backdrop {
+        background-image: url("./assets/images/pattern-confetti.svg");
+        background-repeat: no-repeat;
+        background-position: bottom;
+        backdrop-filter: blur(5px);
+    }
+
+    .dialog__image {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .dialog__image--green-effect {
+        border: 6px solid hsla(140, 63%, 57%, 0.3);
+        outline: 6px solid hsla(140, 63%, 57%, 0.1);
+        border-radius: 50%;
+    }
+
+    .dialog__title {
+        color: var(--color-white);
+    }
+
+    .dialog__subtitle {
+        color: var(--color-text-primary);
     }
 }
 

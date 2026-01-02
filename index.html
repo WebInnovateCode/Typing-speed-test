@@ -52,7 +52,7 @@
                     <h2 id="live-stats" class="sr-only">Live Stats</h2>
                     <div class="list-wrapper">
                         <ul class="list list--col-gap">
-                            <li class="list__item list__item--flex">
+                            <li class="list__item list__item--row">
                                 <span
                                     class="list__item-label list__item-label--sm"
                                     >Difficulty:</span
@@ -87,7 +87,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="list__item list__item--flex">
+                            <li class="list__item--row">
                                 <span
                                     class="list__item-label list__item-label--sm"
                                     >Mode:</span
@@ -142,16 +142,16 @@
                             </li>
                         </ul>
                         <ul class="list list--col-gap">
-                            <li class="list__item--flex-col">
+                            <li class="list__item--col-mobile">
                                 <span
-                                    class="list__item-label list__item-label--sm sr-on"
+                                    class="list__item-label list__item-label--sm"
                                     >WPM</span
                                 >
                                 <output class="list__item-value" data-wpm="40"
                                     >40</output
                                 >
                             </li>
-                            <li class="list__item--flex-col">
+                            <li class="list__item--col-mobile">
                                 <span
                                     class="list__item-label list__item-label--sm"
                                     >Accuracy</span
@@ -162,7 +162,7 @@
                                     >94%</output
                                 >
                             </li>
-                            <li class="list__item--flex-col">
+                            <li class="list__item--col-mobile">
                                 <span
                                     class="list__item-label list__item-label--sm"
                                     >Time</span
@@ -203,6 +203,7 @@
                         <button
                             type="button"
                             class="button button--restart button--center"
+                            data-type="restart"
                         >
                             Restart Test
                             <img
@@ -213,32 +214,42 @@
                         </button>
                     </div>
                 </section>
-                <dialog class="dialog-results">
-                    <h2>Text Complete!</h2>
-                    <ul class="list">
+                <dialog class="dialog dialog--default">
+                    <img
+                        src="./assets/images/icon-completed.svg"
+                        alt="Text Complete"
+                        data-image="record"
+                        class="dialog__image dialog__image--green-effect"
+                    />
+                    <h2 class="dialog__title">Baseline Established!</h2>
+                    <p class="dialog__subtitle">
+                        You've set the bar. Now the real challenge begins - time
+                        to beat it.
+                    </p>
+                    <ul class="list list--col">
                         <li>
-                            <span class="list__item-label">WPM:</span>
+                            <span class="list__item-label">WPM</span>
                             <output
                                 data-result-wpm=""
                                 class="list__item-value"
                             ></output>
                         </li>
                         <li>
-                            <span class="list__item-label">Accuracy:</span>
+                            <span class="list__item-label">Accuracy</span>
                             <output
                                 data-result-accuracy=""
                                 class="list__item-value"
                             ></output>
                         </li>
                         <li>
-                            <span class="list__item-label">Difficulty:</span>
+                            <span class="list__item-label">Difficulty</span>
                             <span
                                 data-result-difficulty=""
                                 class="list__item-value"
                             ></span>
                         </li>
                         <li>
-                            <span class="list__item-label">Mode:</span>
+                            <span class="list__item-label">Mode</span>
                             <span
                                 data-result-mode=""
                                 class="list__item-value"
@@ -247,13 +258,14 @@
                     </ul>
                     <button
                         type="button"
-                        class="button button--restart button--center"
+                        class="button button--restart button--center button--bg-white"
                         data-type="restart"
                     >
-                        Go again!
+                        Beat this score!
                         <img
                             src="./assets/images/icon-restart.svg"
                             alt="restart arrow"
+                            class="button__icon button__icon--black"
                         />
                     </button>
                 </dialog>
@@ -266,7 +278,7 @@
                         href="https://www.frontendmentor.io?ref=challenge"
                         >Frontend Mentor</a
                     >. Coded by
-                    <a class="attribution__link" href="#">Marc Mansour.
+                    <a class="attribution__link" href="#">Marc Mansour.</a>
                 </div>
             </footer>
         </div>

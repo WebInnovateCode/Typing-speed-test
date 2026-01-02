@@ -22,9 +22,11 @@ export default function typingSpeedTest(
 ) {
     let difficulty = defaultDifficulty;
     let singlePassage = generatePassage(difficulty, getEveryPassage);
-    let wpm = 40;
+    let wpm = 0;
     let accuracy = 100;
     let mode = defaultMode;
+    let numberOfPlays = localStorage.getItem("plays") ?? 0;
+    let personalBest = localStorage.getItem("personalBest") ?? 0;
 
     return {
         getEveryPassage: getEveryPassage,
@@ -84,6 +86,10 @@ export default function typingSpeedTest(
 
             return difficulty;
         },
+        getPlays: () => numberOfPlays,
+        incrementPlays: () => ++numberOfPlays,
+        getPB: () => personalBest,
+        setPB: (pb) => (personalBest = pb),
         startTimer: (element, attribute) => {
             let request;
             let start = 0;

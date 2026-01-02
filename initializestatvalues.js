@@ -11,10 +11,19 @@ export function initializeValues(
     currentTest,
     inputSelector,
     textSelector,
-    dialogSelector,
+    {
+        dialogSelector,
+        dialogImageSelector,
+        dialogTitleSelector,
+        dialogSubtitleSelector,
+        dialogButtonSelector,
+    },
     timeSelector,
     resetSelector,
     { wpm, accuracy, difficulty, mode },
+    pbWPMSelector,
+    accuracySelector,
+    wpmSelector,
 ) {
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -33,9 +42,17 @@ export function initializeValues(
         }
     })();
 
+    for (const element of document.querySelectorAll(resetSelector)) {
+        element.addEventListener("click", () => {
+            reset();
+            dialogElement.close();
+        });
+    }
+
+    let handleKeydownEvent, timer;
     return {
         initializePassageInput: () => {
-            const { handleKeydownEvent, timer } = trackStats();
+            ({ handleKeydownEvent, timer } = trackStats());
             const abortController = passageInput.addListener(
                 "keydown",
                 handleKeydownEvent,
@@ -47,33 +64,41 @@ export function initializeValues(
             };
         },
         passageText: element(textSelector).element,
-        dialogElement,
+        dialogElement: {
+            dialogElement,
+            dialogImage: element(dialogImageSelector).element,
+            dialogTitle: element(dialogTitleSelector).element,
+            dialogSubtitle: element(dialogSubtitleSelector).element,
+            dialogButton: element(dialogButtonSelector).element,
+        },
         time: (() => {
             const timeElement = element(timeSelector).element;
             const observer = new MutationObserver((mutation) => {
-                if (
-                    currentTest.getMode() !== "0" &&
-                    mutation[0].target.attributes["data-time"].value === "0"
-                ) {
+                const time = mutation[0].target.attributes["data-time"].value;
+                if (time < currentTest.getMode())
+                    timeElement.style.color = "var(--yellow-400)";
+                if (currentTest.getMode() !== "0" && time === "0") {
                     showResults();
                 }
             });
 
-            observer.observe(timeElement, { attributes: true });
+            observer.observe(timeElement, {
+                attributes: true,
+                attributeFilter: ["data-time"],
+            });
             return {
                 observer,
                 timeElement,
             };
         })(),
-        resetButtonElement: element(resetSelector, "click", () => {
-            reset();
-            dialogElement.close();
-        }),
         resultOfTest: {
             resultWPM: element(wpm).element,
             resultAccuracy: element(accuracy).element,
             resultDifficulty: element(difficulty).element,
             resultMode: element(mode).element,
         },
+        pbWPM: element(pbWPMSelector).element,
+        accuracyElement: element(accuracySelector).element,
+        wpmElement: element(wpmSelector).element,
     };
 }
