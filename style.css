@@ -78,6 +78,7 @@ body {
     .list {
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         justify-content: center;
         list-style-type: none;
         padding: 0;
@@ -119,6 +120,30 @@ body {
         font-size: clamp(1rem, 0.95rem + 0.268vw, 1.2rem);
         font-weight: var(--font-weight-heavy);
         color: var(--color-white);
+    }
+
+    .textarea {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem;
+        background-color: var(--neutral-800);
+        border-radius: 0.25rem;
+    }
+
+    .textarea--hidden {
+        visibility: hidden;
+    }
+
+    .textarea__input {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        color: var(--color-text-primary);
+        font-size: 1rem;
+        font-family: inherit;
+        resize: none;
+        min-height: clamp(3.13rem, 2.23rem + 4.46vw, 6.25rem);
     }
 }
 

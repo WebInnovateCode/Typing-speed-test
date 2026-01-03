@@ -24,16 +24,28 @@ export function initializeValues(
     pbWPMSelector,
     accuracySelector,
     wpmSelector,
+    textareaButtonSelector,
 ) {
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
 
     (() => {
-        for (const difficulty of ["easy", "medium", "hard"]) {
+        for (const difficulty of ["easy", "medium", "hard", "custom"]) {
             element(
                 `[data-difficulty="${difficulty}"]`,
                 "click",
-                handleDifficulty,
+                difficulty === "custom"
+                    ? (event) => {
+                          const { element: activeButton } = element(
+                              ".button--active[data-difficulty]",
+                          );
+                          activeButton.classList.remove("button--active");
+                          event.target.classList.add("button--active");
+                          document
+                              .querySelector(".textarea")
+                              .classList.toggle("textarea--hidden");
+                      }
+                    : handleDifficulty,
             );
         }
 
@@ -50,6 +62,20 @@ export function initializeValues(
     }
 
     let handleKeydownEvent, timer;
+    let passageText = element(textSelector).element;
+
+    element(textareaButtonSelector, "click", () => {
+        const customPassage = DOMPurify.sanitize(
+            document.querySelector(".textarea__input").value,
+        );
+        document
+            .querySelector(".textarea")
+            .classList.toggle("textarea--hidden");
+        document.querySelector(".textarea__input").value = "";
+        currentTest.setCustomPassage(customPassage);
+        currentTest.insertPassageWithCharacterSpan(passageText);
+    });
+
     return {
         initializePassageInput: () => {
             ({ handleKeydownEvent, timer } = trackStats());
@@ -63,7 +89,7 @@ export function initializeValues(
                 handlerTimer: timer,
             };
         },
-        passageText: element(textSelector).element,
+        passageText,
         dialogElement: {
             dialogElement,
             dialogImage: element(dialogImageSelector).element,

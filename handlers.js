@@ -30,7 +30,7 @@ const {
         dialogButtonSelector: "dialog [data-type]",
     },
     "time",
-    "[data-type]",
+    "[data-type='restart']",
     {
         wpm: "[data-result-wpm]",
         accuracy: "[data-result-accuracy]",
@@ -40,6 +40,7 @@ const {
     ".personal-best__wpm",
     "[data-accuracy]",
     "[data-wpm]",
+    "[data-type='complete']",
 );
 
 let { passageInput, abortController, handlerTimer } = initializePassageInput();

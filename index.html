@@ -11,6 +11,7 @@
         />
         <link rel="stylesheet" href="style.css" />
         <title>Typing Speed Test</title>
+        <script type="text/javascript" src="./purify.min.js"></script>
         <script type="module" src="./script.js"></script>
     </head>
     <body>
@@ -84,6 +85,35 @@
                                         >
                                             Hard
                                         </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            class="button"
+                                            type="button"
+                                            data-difficulty="custom"
+                                        >
+                                            Custom
+                                        </button>
+                                        <div class="textarea textarea--hidden">
+                                            <label
+                                                for="custom-passage"
+                                                class="sr-only"
+                                            >
+                                                Custom Passage
+                                            </label>
+                                            <textarea
+                                                name="custom-passage"
+                                                id="custom-passage"
+                                                class="textarea__input"
+                                            ></textarea>
+                                            <button
+                                                type="button"
+                                                class="button"
+                                                data-type="complete"
+                                            >
+                                                Done
+                                            </button>
+                                        </div>
                                     </li>
                                 </ul>
                             </li>
@@ -183,9 +213,9 @@
                     <div class="test">
                         <p class="test__passage"></p>
                         <div class="test__grid-item">
-                            <label for="passage" class="sr-only"
-                                >Test Area</label
-                            >
+                            <label for="passage" class="sr-only">
+                                Test Area
+                            </label>
                             <textarea
                                 class="test__input"
                                 name="passage"
