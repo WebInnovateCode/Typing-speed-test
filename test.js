@@ -8,8 +8,11 @@ const generatePassage = (difficulty = "easy", passages) =>
 const encloseCharactersInSpan = (passage) => {
     const fragment = document.createDocumentFragment();
     const spanElement = document.createElement("span");
+    let clone = spanElement.cloneNode();
+    clone.classList.add("cursor");
+    fragment.append(clone);
     for (const letter of passage) {
-        const clone = spanElement.cloneNode();
+        clone = spanElement.cloneNode();
         clone.textContent = letter;
         fragment.append(clone);
     }

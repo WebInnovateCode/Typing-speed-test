@@ -17,7 +17,7 @@ const {
     resultOfTest: { resultWPM, resultAccuracy, resultDifficulty, resultMode },
     pbWPM,
     accuracyElement,
-    wpmElement,
+    textareaElement,
 } = initializeValues(
     currentTest,
     "#passage",
@@ -41,11 +41,11 @@ const {
     "[data-accuracy]",
     "[data-wpm]",
     "[data-type='complete']",
+    ".textarea",
+    ".textarea__input",
 );
 
 let { passageInput, abortController, handlerTimer } = initializePassageInput();
-
-pbWPM.textContent = currentTest.getPB();
 
 function trackStats() {
     let count = 0;
@@ -53,35 +53,32 @@ function trackStats() {
     let numberOfIncorrect = 0;
     let timer = currentTest.startTimer(timeElement, "data-time");
     let passage;
+    let cursor;
+    let currentCharacterSpan;
+
+    function moveCursor(currentPosition, nextPosition) {
+        cursor = passageText.children[currentPosition];
+        currentCharacterSpan = passageText.children[nextPosition];
+        currentCharacterSpan.after(cursor);
+    }
 
     function handleKeydownEvent(event) {
-        const currentCharacterSpan = passageText.children[count];
         if (timer.startTime() === 0) {
             passage = currentTest.getCurrentPassage();
             timer.start();
         }
 
         if (event.key === "Backspace") {
-            if (count > 0) passageText.children[--count].className = "";
+            if (count > 0) {
+                passageText.children[--count].className = "";
+                moveCursor(count, count + 1);
+            }
         } else if (
             event.key !== "CapsLock" &&
             event.key !== "Shift" &&
             event.key !== "Escape"
         ) {
-            currentTest.setWPM(
-                totalCharactersTyped,
-                timer.getElapsedTime(),
-                wpmElement,
-            );
-            currentTest.setAccuracy(
-                totalCharactersTyped,
-                numberOfIncorrect,
-                accuracyElement,
-            );
-
-            if (currentTest.getAccuracy() < 100)
-                document.querySelector("[data-accuracy]").style.color =
-                    "var(--red-500)";
+            moveCursor(count, count + 1);
 
             if (
                 event.key === passage[count] ||
@@ -105,40 +102,61 @@ function trackStats() {
     return {
         handleKeydownEvent,
         timer,
+        totalCharactersTyped: () => totalCharactersTyped,
+        numberOfIncorrect: () => numberOfIncorrect,
     };
 }
 
 function handleDifficulty(event) {
-    const { element: activeButton } = element(
+    changeActiveButton(
         ".button--active[data-difficulty]",
+        "button--active",
+        event.target,
     );
     currentTest.setSinglePassage(
         currentTest.setDifficulty(
             event.target.attributes["data-difficulty"].value,
         ),
     );
-    currentTest.insertPassageWithCharacterSpan(passageText);
-    activeButton.classList.remove("button--active");
-    event.target.classList.add("button--active");
     reset();
 }
 
 function handleMode(event) {
-    const { element: activeButton } = element(".button--active[data-mode]");
+    changeActiveButton(
+        ".button--active[data-mode]",
+        "button--active",
+        event.target,
+    );
     currentTest.setMode(event.target.dataset.mode, timeElement);
-    activeButton.classList.remove("button--active");
-    event.target.classList.add("button--active");
     reset();
+}
+
+function changeActiveButton(
+    activeButtonSelector,
+    activeButtonClass,
+    addToElement,
+) {
+    const { element: activeButton } = element(activeButtonSelector);
+    activeButton.classList.remove(activeButtonClass);
+    addToElement.classList.add(activeButtonClass);
 }
 
 function reset() {
     if (handlerTimer.startTime() !== 0) handlerTimer.stop();
-    timeElement.style.color = "var(--color-white)";
-    accuracyElement.style.color = "var(--color-white)";
-    currentTest.setAccuracy(100, 0, accuracyElement);
+    changeActiveButton(
+        ".button--active[data-difficulty]",
+        "button--active",
+        document.querySelector(
+            `[data-difficulty="${currentTest.getDifficulty()}"]`,
+        ),
+    );
+    textareaElement.classList.add("textarea--hidden");
+    timeElement.classList.remove("list__item-value--yellow");
+    accuracyElement.classList.remove("list__item-value--red");
     timeElement.textContent = currentTest.getMode() + "s";
     currentTest.setSinglePassage(currentTest.getDifficulty());
     currentTest.insertPassageWithCharacterSpan(passageText);
+    currentTest.setAccuracy(100, 0, accuracyElement);
     abortController();
     ({ passageInput, abortController, handlerTimer } =
         initializePassageInput());
@@ -217,4 +235,6 @@ export {
     reset,
     showResults,
     resizeInputHeight,
+    changeActiveButton,
+    handlerTimer,
 };
