@@ -8,18 +8,31 @@ const generatePassage = (difficulty = "easy", passages) =>
 const encloseCharactersInSpan = (passage) => {
     const fragment = document.createDocumentFragment();
     const spanElement = document.createElement("span");
+    const divElement = document.createElement("div");
     let clone = spanElement.cloneNode();
+    let divClone = divElement.cloneNode();
+    let newWord = false;
     clone.classList.add("cursor");
-    fragment.append(clone);
+    divClone.append(clone);
     for (const letter of passage) {
         clone = spanElement.cloneNode();
         clone.textContent = letter;
-        fragment.append(clone);
+        if (newWord) {
+            divClone = divElement.cloneNode();
+            newWord = false;
+        }
+        if (letter === " ") clone.style.padding = "0 4px";
+        divClone.append(clone);
+        if (letter === " ") {
+            fragment.append(divClone);
+            newWord = true;
+        }
     }
+    fragment.append(divClone);
     return fragment;
 };
 
-export default function typingSpeedTest(
+export function typingSpeedTest(
     defaultDifficulty = "easy",
     defaultMode = "60",
 ) {

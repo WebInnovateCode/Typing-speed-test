@@ -17,6 +17,7 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="style.css" />
+        <link rel="icon" href="./assets/images/favicon-32x32.png" />
         <script type="text/javascript" src="./purify.min.js"></script>
         <script type="module" src="./script.js"></script>
         <title>Typing Speed Test</title>
@@ -205,21 +206,27 @@
                                     class="list__item-label list__item-label--sm"
                                     >Time</span
                                 >
-                                <time
+                                <span
+                                    role="timer"
                                     class="list__item-value"
-                                    datetime="PT60S"
                                     data-time="60"
                                 >
                                     60s
-                                </time>
+                                </span>
+                                <div
+                                    role="alert"
+                                    aria-live="assertive"
+                                    class="sr-only"
+                                ></div>
                             </li>
                         </ul>
+                        <div role="status" class="sr-only"></div>
                     </div>
                 </section>
                 <section aria-labelledby="take-test">
                     <h2 id="take-test" class="sr-only">Take Test</h2>
                     <div class="test">
-                        <p class="test__passage"></p>
+                        <div class="test__passage"></div>
                         <div class="test__grid-item">
                             <label for="passage" class="sr-only">
                                 Test Area
@@ -288,10 +295,11 @@
                         </li>
                         <li>
                             <span class="list__item-label">Mode</span>
-                            <span
+                            <time
                                 data-result-mode=""
                                 class="list__item-value"
-                            ></span>
+                                datetime=""
+                            ></time>
                         </li>
                     </ul>
                     <button

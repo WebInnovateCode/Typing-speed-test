@@ -29,6 +29,8 @@ export function initializeValues(currentTest, ...selectors) {
         textareaButtonSelector,
         textareaSelector,
         textareaInputSelector,
+        statusSelector,
+        alertSelector,
     ] = selectors;
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -78,6 +80,7 @@ export function initializeValues(currentTest, ...selectors) {
                 textareaInputElement.value = "";
                 currentTest.setCustomPassage(customPassage);
                 currentTest.insertPassageWithCharacterSpan(passageText);
+                currentTest.setDifficulty("custom");
                 resizeInputHeight();
             }
             textareaElement.classList.toggle("textarea--hidden");
@@ -158,5 +161,7 @@ export function initializeValues(currentTest, ...selectors) {
         accuracyElement,
         wpmElement,
         textareaElement,
+        statusElement: element(statusSelector).element,
+        alertElement: element(alertSelector).element,
     };
 }
