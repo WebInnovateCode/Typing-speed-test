@@ -19,7 +19,7 @@ const {
     accuracyElement,
     textareaElement,
     statusElement,
-    alertElement,
+    listElement,
 } = initializeValues(
     currentTest,
     "#passage",
@@ -45,11 +45,11 @@ const {
     "[data-type='complete']",
     ".textarea",
     ".textarea__input",
-    "[role='status']",
-    "[role='alert']",
+    "[role='status'][class='sr-only']",
+    ".list-wrapper .list:first-child",
 );
 
-let { passageInput, abortController, handlerTimer } = initializePassageInput();
+let { abortController, handlerTimer } = initializePassageInput();
 
 function trackStats() {
     let count = 0;
@@ -68,7 +68,6 @@ function trackStats() {
     let line = 0;
     let wordCount = 0;
     let letterCount = 0;
-    let previousWord = 0;
     let currentWord = -1;
     let lineCount = 0;
     function moveCursor(currentPosition, nextPosition, isBackspace = false) {
@@ -90,6 +89,8 @@ function trackStats() {
 
     function handleKeydownEvent(event) {
         if (timer.startTime() === 0) {
+            listElement.classList.add("list--hidden");
+            textareaElement.classList.add("textarea--hidden");
             passage = currentTest.getCurrentPassage();
             timer.start();
         }
@@ -101,7 +102,7 @@ function trackStats() {
                 moveCursor(letterCount, letterCount + 1, true);
                 passageText.children[wordCount].children[
                     letterCount + 1
-                ].className = "";
+                ].classList.remove("correct", "incorrect");
             }
         } else if (
             event.key !== "CapsLock" &&
@@ -114,17 +115,15 @@ function trackStats() {
                     passageText.children[wordCount].getBoundingClientRect()
                         .width - 5;
                 currentWord = wordCount;
-                console.log(lineWidth);
             }
             if (lineWidth >= passageWidth) {
-                console.log("test");
                 lineWidth =
                     passageText.children[wordCount].getBoundingClientRect()
                         .width;
                 line += 1;
                 if (line % 2 === 0) {
-                    for (let i = lineCount; i >= 0; i--) {
-                        passageText.children[i].remove();
+                    for (let index = lineCount; index >= 0; index--) {
+                        passageText.children[index].remove();
                     }
                     line -= 1;
                     wordCount = wordCount - lineCount - 1;
@@ -198,6 +197,16 @@ function changeActiveButton(
 function reset() {
     const currentMode = currentTest.getMode();
     if (handlerTimer.startTime() !== 0) handlerTimer.stop();
+    textareaElement.classList.add("textarea--hidden");
+    listElement.classList.remove("list--hidden");
+    timeElement.classList.remove("list__item-value--yellow");
+    accuracyElement.classList.remove("list__item-value--red");
+    timeElement.textContent = currentMode + "s";
+    currentTest.setSinglePassage(
+        currentTest.getDifficulty() === "custom"
+            ? currentTest.setDifficulty("easy")
+            : currentTest.getDifficulty(),
+    );
     changeActiveButton(
         ".button--active[data-difficulty]",
         "button--active",
@@ -205,17 +214,11 @@ function reset() {
             `[data-difficulty="${currentTest.getDifficulty()}"]`,
         ),
     );
-    textareaElement.classList.add("textarea--hidden");
-    timeElement.classList.remove("list__item-value--yellow");
-    accuracyElement.classList.remove("list__item-value--red");
-    timeElement.textContent = currentMode + "s";
-    currentTest.setSinglePassage(currentTest.getDifficulty());
     currentTest.insertPassageWithCharacterSpan(passageText);
     currentTest.setAccuracy(100, 0, accuracyElement);
     abortController();
-    ({ passageInput, abortController, handlerTimer } =
-        initializePassageInput());
-    statusElement.textContent = `Typing test reset. Difficulty: ${currentTest.getDifficulty()}. Time mode: ${
+    ({ abortController, handlerTimer } = initializePassageInput());
+    statusElement.textContent = `New passage set. Difficulty: ${currentTest.getDifficulty()}. Time mode: ${
         currentMode === "0" ? "passage" : currentMode + "seconds"
     }.`;
 }
@@ -281,11 +284,6 @@ function dialogViewChange(
     dialogButton.textContent = buttonText;
 }
 
-function resizeInputHeight() {
-    passageInput.style.height = "auto";
-    passageInput.style.height = passageText.scrollHeight + "px";
-}
-
 export {
     currentTest,
     passageText,
@@ -294,7 +292,6 @@ export {
     handleMode,
     reset,
     showResults,
-    resizeInputHeight,
     changeActiveButton,
     handlerTimer,
 };

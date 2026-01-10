@@ -5,7 +5,6 @@ import {
     handleMode,
     showResults,
     reset,
-    resizeInputHeight,
     changeActiveButton,
 } from "./handlers.js";
 
@@ -30,7 +29,7 @@ export function initializeValues(currentTest, ...selectors) {
         textareaSelector,
         textareaInputSelector,
         statusSelector,
-        alertSelector,
+        listSelector,
     ] = selectors;
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -40,6 +39,7 @@ export function initializeValues(currentTest, ...selectors) {
     const pbWPM = element(pbWPMSelector).element;
     const textareaElement = element(textareaSelector).element;
     const textareaInputElement = element(textareaInputSelector).element;
+    const statusElement = element(statusSelector).element;
     let handleKeydownEvent, timer, totalCharactersTyped, numberOfIncorrect;
     pbWPM.textContent = currentTest.getPB();
 
@@ -74,14 +74,13 @@ export function initializeValues(currentTest, ...selectors) {
 
         element(textareaButtonSelector, "click", () => {
             const customPassage = DOMPurify.sanitize(
-                textareaInputElement.value,
+                textareaInputElement.value.trim(),
             );
             if (customPassage.length > 0) {
                 textareaInputElement.value = "";
                 currentTest.setCustomPassage(customPassage);
                 currentTest.insertPassageWithCharacterSpan(passageText);
                 currentTest.setDifficulty("custom");
-                resizeInputHeight();
             }
             textareaElement.classList.toggle("textarea--hidden");
         });
@@ -133,6 +132,9 @@ export function initializeValues(currentTest, ...selectors) {
                     );
                     if (currentTest.getAccuracy() < 100)
                         accuracyElement.classList.add("list__item-value--red");
+                    if (time % 5 === 0) {
+                        statusElement.textContent = time + "seconds";
+                    }
                     previousTime = time;
                 }
                 if (time < currentTest.getMode())
@@ -161,7 +163,7 @@ export function initializeValues(currentTest, ...selectors) {
         accuracyElement,
         wpmElement,
         textareaElement,
-        statusElement: element(statusSelector).element,
-        alertElement: element(alertSelector).element,
+        statusElement,
+        listElement: element(listSelector).element,
     };
 }

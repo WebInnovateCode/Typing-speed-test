@@ -1,3 +1,3 @@
-import { currentTest, passageText, resizeInputHeight } from "./handlers.js";
+import { currentTest, passageText } from "./handlers.js";
 
 currentTest.insertPassageWithCharacterSpan(passageText);

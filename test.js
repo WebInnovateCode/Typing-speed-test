@@ -21,11 +21,14 @@ const encloseCharactersInSpan = (passage) => {
             divClone = divElement.cloneNode();
             newWord = false;
         }
-        if (letter === " ") clone.style.padding = "0 4px";
-        divClone.append(clone);
+
         if (letter === " ") {
+            clone.classList.add("test__whitespace");
+            divClone.append(clone);
             fragment.append(divClone);
             newWord = true;
+        } else {
+            divClone.append(clone);
         }
     }
     fragment.append(divClone);
@@ -112,7 +115,8 @@ export function typingSpeedTest(
             let elapsed = 0;
 
             const setTimeOnElement = (element, attribute) => {
-                const currentTime = mode === "0" ? elapsed : mode - elapsed;
+                const currentTime =
+                    mode === "0" ? elapsed : Math.max(mode - elapsed, 0);
 
                 element.textContent = currentTime + "s";
                 if (attribute) element.setAttribute(attribute, currentTime);
@@ -125,7 +129,7 @@ export function typingSpeedTest(
                     start = timestamp;
                 }
 
-                elapsed = Math.round((timestamp - start) / 1000);
+                elapsed = Math.floor((timestamp - start) / 1000);
 
                 if (element) setTimeOnElement(element, attribute);
 

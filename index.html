@@ -24,6 +24,7 @@
     </head>
     <body>
         <div class="wrapper">
+            <div class="backdrop-blur"></div>
             <header class="header">
                 <div>
                     <picture>
@@ -56,7 +57,7 @@
                     <span class="personal-best__wpm">40</span>WPM
                 </div>
             </header>
-            <main>
+            <main class="flex-container">
                 <section aria-labelledby="live-stats">
                     <h2 id="live-stats" class="sr-only">Live Stats</h2>
                     <div class="list-wrapper">
@@ -102,27 +103,6 @@
                                         >
                                             Custom
                                         </button>
-                                        <div class="textarea textarea--hidden">
-                                            <label
-                                                for="custom-passage"
-                                                class="sr-only"
-                                            >
-                                                Custom Passage
-                                            </label>
-                                            <textarea
-                                                name="custom-passage"
-                                                id="custom-passage"
-                                                class="textarea__input"
-                                            ></textarea>
-
-                                            <button
-                                                type="button"
-                                                class="button"
-                                                data-type="complete"
-                                            >
-                                                Done
-                                            </button>
-                                        </div>
                                     </li>
                                 </ul>
                             </li>
@@ -180,13 +160,34 @@
                                 </ul>
                             </li>
                         </ul>
+                        <div class="textarea textarea--hidden">
+                            <label for="custom-passage" class="sr-only">
+                                Custom Passage
+                            </label>
+                            <textarea
+                                name="custom-passage"
+                                id="custom-passage"
+                                class="textarea__input"
+                                placeholder="Custom text here..."
+                            ></textarea>
+                            <button
+                                type="button"
+                                class="button button--restart"
+                                data-type="complete"
+                            >
+                                Done
+                            </button>
+                        </div>
                         <ul class="list list--col-gap">
                             <li class="list__item--col-mobile">
                                 <span
                                     class="list__item-label list__item-label--sm"
                                     >WPM</span
                                 >
-                                <output class="list__item-value" data-wpm="40"
+                                <output
+                                    class="list__item-value"
+                                    data-wpm="40"
+                                    for="passage"
                                     >40</output
                                 >
                             </li>
@@ -198,6 +199,7 @@
                                 <output
                                     class="list__item-value"
                                     data-accuracy="94%"
+                                    for="passage"
                                     >94%</output
                                 >
                             </li>
@@ -213,14 +215,8 @@
                                 >
                                     60s
                                 </span>
-                                <div
-                                    role="alert"
-                                    aria-live="assertive"
-                                    class="sr-only"
-                                ></div>
                             </li>
                         </ul>
-                        <div role="status" class="sr-only"></div>
                     </div>
                 </section>
                 <section aria-labelledby="take-test">
@@ -274,17 +270,17 @@
                     <ul class="list list--col">
                         <li>
                             <span class="list__item-label">WPM</span>
-                            <output
+                            <span
                                 data-result-wpm=""
                                 class="list__item-value"
-                            ></output>
+                            ></span>
                         </li>
                         <li>
                             <span class="list__item-label">Accuracy</span>
-                            <output
+                            <span
                                 data-result-accuracy=""
                                 class="list__item-value"
-                            ></output>
+                            ></span>
                         </li>
                         <li>
                             <span class="list__item-label">Difficulty</span>
@@ -315,6 +311,7 @@
                         />
                     </button>
                 </dialog>
+                <div role="status" class="sr-only" aria-live="assertive"></div>
             </main>
             <footer class="footer">
                 <div class="attribution">
