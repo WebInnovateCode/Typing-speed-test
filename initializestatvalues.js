@@ -40,7 +40,7 @@ export function initializeValues(currentTest, ...selectors) {
     const textareaElement = element(textareaSelector).element;
     const textareaInputElement = element(textareaInputSelector).element;
     const statusElement = element(statusSelector).element;
-    let handleKeydownEvent, timer, totalCharactersTyped, numberOfIncorrect;
+    let handleInputEvent, timer, totalCharactersTyped, numberOfIncorrect;
     pbWPM.textContent = currentTest.getPB();
 
     function initializeNotExportedValues() {
@@ -91,14 +91,14 @@ export function initializeValues(currentTest, ...selectors) {
     return {
         initializePassageInput: () => {
             ({
-                handleKeydownEvent,
+                handleInputEvent,
                 timer,
                 totalCharactersTyped,
                 numberOfIncorrect,
             } = trackStats());
             const abortController = passageInput.addListener(
-                "keydown",
-                handleKeydownEvent,
+                "input",
+                handleInputEvent,
             );
             return {
                 passageInput: passageInput.element,

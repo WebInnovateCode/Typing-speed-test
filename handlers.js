@@ -87,7 +87,9 @@ function trackStats() {
         } else currentCharacterSpan.after(cursor);
     }
 
-    function handleKeydownEvent(event) {
+    function handleInputEvent(event) {
+        const key = event.data;
+        const inputType = event.inputType;
         if (timer.startTime() === 0) {
             listElement.classList.add("list--hidden");
             textareaElement.classList.add("textarea--hidden");
@@ -95,7 +97,7 @@ function trackStats() {
             timer.start();
         }
 
-        if (event.key === "Backspace") {
+        if (inputType === "deleteContentBackward") {
             if (wordCount > 0 || letterCount > 0) {
                 count -= 1;
                 if (letterCount > 0) letterCount -= 1;
@@ -104,11 +106,7 @@ function trackStats() {
                     letterCount + 1
                 ].classList.remove("correct", "incorrect");
             }
-        } else if (
-            event.key !== "CapsLock" &&
-            event.key !== "Shift" &&
-            event.key !== "Escape"
-        ) {
+        } else {
             moveCursor(letterCount, letterCount + 1);
             if (currentWord !== wordCount && wordCount > currentWord) {
                 lineWidth +=
@@ -133,8 +131,8 @@ function trackStats() {
             }
 
             if (
-                event.key === passage[count] ||
-                (event.key === "-" && passage[count] === "\u2014")
+                key === passage[count] ||
+                (key === "-" && passage[count] === "\u2014")
             ) {
                 currentCharacterSpan.classList.add("correct");
             } else {
@@ -153,7 +151,7 @@ function trackStats() {
     }
 
     return {
-        handleKeydownEvent,
+        handleInputEvent,
         timer,
         totalCharactersTyped: () => totalCharactersTyped,
         numberOfIncorrect: () => numberOfIncorrect,
