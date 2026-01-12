@@ -100,6 +100,16 @@
     .keyboard-options {
         padding: 0 0 5rem;
         text-align: center;
+        transition: opacity 0.5s ease-in;
+    }
+
+    .keyboard-options--hidden {
+        content-visibility: hidden;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.5s ease-out,
+            content-visibility 0.5s allow-discrete,
+            visibility 0.5s allow-discrete;
     }
 
     .shortcut {

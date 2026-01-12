@@ -31,6 +31,7 @@ export function initializeValues(currentTest, ...selectors) {
         statusSelector,
         listSelector,
         alertSelector,
+        optionsSelector,
     ] = selectors;
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -174,5 +175,6 @@ export function initializeValues(currentTest, ...selectors) {
         statusElement,
         listElement: element(listSelector).element,
         alertElement,
+        optionsElement: element(optionsSelector).element,
     };
 }
