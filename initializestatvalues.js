@@ -30,6 +30,7 @@ export function initializeValues(currentTest, ...selectors) {
         textareaInputSelector,
         statusSelector,
         listSelector,
+        alertSelector,
     ] = selectors;
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -40,7 +41,11 @@ export function initializeValues(currentTest, ...selectors) {
     const textareaElement = element(textareaSelector).element;
     const textareaInputElement = element(textareaInputSelector).element;
     const statusElement = element(statusSelector).element;
-    let handleInputEvent, timer, totalCharactersTyped, numberOfIncorrect;
+    let handleInputEvent,
+        timer,
+        totalCharactersTyped,
+        numberOfIncorrect,
+        currentWordPosition;
     pbWPM.textContent = currentTest.getPB();
 
     function initializeNotExportedValues() {
@@ -95,6 +100,7 @@ export function initializeValues(currentTest, ...selectors) {
                 timer,
                 totalCharactersTyped,
                 numberOfIncorrect,
+                currentWordPosition,
             } = trackStats());
             const abortController = passageInput.addListener(
                 "input",
@@ -104,6 +110,7 @@ export function initializeValues(currentTest, ...selectors) {
                 passageInput: passageInput.element,
                 abortController,
                 handlerTimer: timer,
+                currentWordPosition,
             };
         },
         passageText,
@@ -132,8 +139,8 @@ export function initializeValues(currentTest, ...selectors) {
                     );
                     if (currentTest.getAccuracy() < 100)
                         accuracyElement.classList.add("list__item-value--red");
-                    if (time % 5 === 0) {
-                        statusElement.textContent = time + "seconds";
+                    if (time % 10 === 0) {
+                        //statusElement.textContent = time + "seconds";
                     }
                     previousTime = time;
                 }
@@ -165,5 +172,6 @@ export function initializeValues(currentTest, ...selectors) {
         textareaElement,
         statusElement,
         listElement: element(listSelector).element,
+        alertElement: element(alertSelector).element,
     };
 }

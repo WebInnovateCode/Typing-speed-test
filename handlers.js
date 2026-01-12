@@ -1,6 +1,7 @@
 import { typingSpeedTest } from "./test.js";
 import { element } from "./element.js";
 import { initializeValues } from "./initializestatvalues.js";
+import { controls } from "./controls.js";
 
 const currentTest = typingSpeedTest("easy", "60");
 const {
@@ -20,6 +21,7 @@ const {
     textareaElement,
     statusElement,
     listElement,
+    alertElement,
 } = initializeValues(
     currentTest,
     "#passage",
@@ -45,11 +47,14 @@ const {
     "[data-type='complete']",
     ".textarea",
     ".textarea__input",
-    "[role='status'][class='sr-only']",
+    "#status",
     ".list-wrapper .list:first-child",
+    "#alert",
 );
 
-let { abortController, handlerTimer } = initializePassageInput();
+let { passageInput, abortController, handlerTimer, currentWordPosition } =
+    initializePassageInput();
+const controlsReset = controls(currentTest);
 
 function trackStats() {
     let count = 0;
@@ -70,15 +75,19 @@ function trackStats() {
     let letterCount = 0;
     let currentWord = -1;
     let lineCount = 0;
+    let currentWordPosition = 0;
+    let words;
     function moveCursor(currentPosition, nextPosition, isBackspace = false) {
         cursor = passageText.children[wordCount].children[currentPosition];
         currentCharacterSpan =
             passageText.children[wordCount].children[nextPosition];
         if (passage[count] === " " && !isBackspace) {
+            currentWordPosition += 1;
             wordCount += 1;
             letterCount = -1;
             passageText.children[wordCount].prepend(cursor);
         } else if (passage[count] === " " && isBackspace) {
+            currentWordPosition -= 1;
             wordCount -= 1;
             letterCount = passageText.children[wordCount].children.length - 1;
             passageText.children[wordCount].children[letterCount].before(
@@ -94,6 +103,7 @@ function trackStats() {
             listElement.classList.add("list--hidden");
             textareaElement.classList.add("textarea--hidden");
             passage = currentTest.getCurrentPassage();
+            words = passage.split(" ");
             timer.start();
         }
 
@@ -137,6 +147,13 @@ function trackStats() {
                 currentCharacterSpan.classList.add("correct");
             } else {
                 currentCharacterSpan.classList.add("incorrect");
+                alertElement.textContent =
+                    "Replace incorrect character: " +
+                    key +
+                    " with " +
+                    passage[count] +
+                    " in word " +
+                    words[currentWordPosition];
                 numberOfIncorrect += 1;
             }
 
@@ -155,6 +172,7 @@ function trackStats() {
         timer,
         totalCharactersTyped: () => totalCharactersTyped,
         numberOfIncorrect: () => numberOfIncorrect,
+        currentWordPosition: () => currentWordPosition,
     };
 }
 
@@ -215,7 +233,9 @@ function reset() {
     currentTest.insertPassageWithCharacterSpan(passageText);
     currentTest.setAccuracy(100, 0, accuracyElement);
     abortController();
-    ({ abortController, handlerTimer } = initializePassageInput());
+    ({ abortController, handlerTimer, currentWordPosition } =
+        initializePassageInput());
+    controlsReset.reset();
     statusElement.textContent = `New passage set. Difficulty: ${currentTest.getDifficulty()}. Time mode: ${
         currentMode === "0" ? "passage" : currentMode + "seconds"
     }.`;
@@ -292,4 +312,7 @@ export {
     showResults,
     changeActiveButton,
     handlerTimer,
+    statusElement,
+    currentWordPosition,
+    passageInput,
 };
