@@ -280,6 +280,7 @@ function showResults() {
         resultMode.setAttribute("datetime", `PT${currentTest.getMode()}S`);
     }
     dialogElement.showModal();
+    document.querySelector("dialog ul").focus();
     reset();
 }
 

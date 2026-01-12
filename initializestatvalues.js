@@ -41,6 +41,7 @@ export function initializeValues(currentTest, ...selectors) {
     const textareaElement = element(textareaSelector).element;
     const textareaInputElement = element(textareaInputSelector).element;
     const statusElement = element(statusSelector).element;
+    const alertElement = element(alertSelector).element;
     let handleInputEvent,
         timer,
         totalCharactersTyped,
@@ -139,8 +140,8 @@ export function initializeValues(currentTest, ...selectors) {
                     );
                     if (currentTest.getAccuracy() < 100)
                         accuracyElement.classList.add("list__item-value--red");
-                    if (time % 10 === 0) {
-                        //statusElement.textContent = time + "seconds";
+                    if (time === "10") {
+                        alertElement.textContent = "10 seconds remaining";
                     }
                     previousTime = time;
                 }
@@ -172,6 +173,6 @@ export function initializeValues(currentTest, ...selectors) {
         textareaElement,
         statusElement,
         listElement: element(listSelector).element,
-        alertElement: element(alertSelector).element,
+        alertElement,
     };
 }
