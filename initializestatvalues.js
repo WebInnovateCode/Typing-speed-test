@@ -32,6 +32,7 @@ export function initializeValues(currentTest, ...selectors) {
         listSelector,
         alertSelector,
         optionsSelector,
+        themeSelector,
     ] = selectors;
     const passageInput = element(inputSelector);
     const dialogElement = element(dialogSelector).element;
@@ -43,13 +44,23 @@ export function initializeValues(currentTest, ...selectors) {
     const textareaInputElement = element(textareaInputSelector).element;
     const statusElement = element(statusSelector).element;
     const alertElement = element(alertSelector).element;
+    const buttonThemeElement = element(themeSelector).element;
     let handleInputEvent,
         timer,
         totalCharactersTyped,
         numberOfIncorrect,
         currentWordPosition;
     pbWPM.textContent = currentTest.getPB();
-
+    const theme = localStorage.getItem("theme") ?? "dark";
+    if (theme === "light") {
+        buttonThemeElement.children[0].classList.remove("button__icon--white");
+        buttonThemeElement.children[0].src =
+            "./assets/images/sun-regular-full.svg";
+        document
+            .querySelector("#restart-icon")
+            .classList.toggle("button__icon--black");
+    }
+    document.querySelector("html").dataset.theme = theme;
     function initializeNotExportedValues() {
         for (const difficulty of ["easy", "medium", "hard", "custom"]) {
             element(
@@ -90,6 +101,43 @@ export function initializeValues(currentTest, ...selectors) {
                 currentTest.setDifficulty("custom");
             }
             textareaElement.classList.toggle("textarea--hidden");
+        });
+
+        element(themeSelector, "click", (event) => {
+            if (
+                document.querySelector("html").getAttribute("data-theme") ===
+                "dark"
+            ) {
+                document
+                    .querySelector("html")
+                    .setAttribute("data-theme", "light");
+
+                buttonThemeElement.children[0].classList.remove(
+                    "button__icon--white",
+                );
+                buttonThemeElement.children[0].src =
+                    "./assets/images/sun-regular-full.svg";
+                document
+                    .querySelector("#restart-icon")
+                    .classList.toggle("button__icon--black");
+
+                localStorage.setItem("theme", "light");
+            } else {
+                document
+                    .querySelector("html")
+                    .setAttribute("data-theme", "dark");
+
+                buttonThemeElement.children[0].classList.add(
+                    "button__icon--white",
+                );
+                buttonThemeElement.children[0].src =
+                    "./assets/images/moon-solid-full.svg";
+                document
+                    .querySelector("#restart-icon")
+                    .classList.toggle("button__icon--black");
+
+                localStorage.setItem("theme", "dark");
+            }
         });
     }
 

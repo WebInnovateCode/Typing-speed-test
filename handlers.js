@@ -52,6 +52,7 @@ const {
     ".list-wrapper .list:first-child",
     "#alert",
     ".keyboard-options",
+    "[data-type='theme']",
 );
 
 let { passageInput, abortController, handlerTimer, currentWordPosition } =
