@@ -1,159 +1,156 @@
+import { currentTest } from "./test.js";
 import { element } from "./element.js";
 import {
     trackStats,
+    showResults,
+    handleCustomPassageInput,
     handleDifficulty,
     handleMode,
-    showResults,
-    reset,
-    changeActiveButton,
+    handleReset,
+    handleTheme,
 } from "./handlers.js";
 
-export function initializeValues(currentTest, ...selectors) {
-    const [
+export const targetElements = initializeValues(currentTest, {
+    inputSelector: "#passage",
+    textSelector: ".test__passage",
+    wpmResultSelector: "[data-result-wpm]",
+    accuracyResultSelector: "[data-result-accuracy]",
+    difficultyResultSelector: "[data-result-difficulty]",
+    modeResultSelector: "[data-result-mode]",
+    accuracySelector: "[data-accuracy]",
+    wpmSelector: "[data-wpm]",
+    pbWPMSelector: ".personal-best__wpm",
+    dialogSelector: ".dialog",
+    dialogImageSelector: ".dialog__image",
+    dialogTitleSelector: ".dialog__title",
+    dialogSubtitleSelector: ".dialog__subtitle",
+    dialogButtonSelector: ".dialog .button",
+    timeSelector: "[role='timer']",
+    resetSelector: "[data-type='restart']",
+    textareaSelector: ".textarea",
+    textareaInputSelector: ".textarea__input",
+    textareaButtonSelector: ".textarea [data-type='complete']",
+    statusSelector: "#status",
+    alertSelector: "#alert",
+    listSelector: ".list-wrapper .list:first-child",
+    optionsSelector: ".controls",
+    themeSelector: "[data-type='theme']",
+});
+
+function initNotExport(resetSelector, textareaButtonSelector, themeSelector) {
+    for (const difficulty of ["easy", "medium", "hard", "custom"]) {
+        element(`[data-difficulty="${difficulty}"]`, "click", handleDifficulty);
+    }
+
+    for (const mode of ["60", "45", "30", "15", "passage"]) {
+        element(`[data-mode="${mode}"]`, "click", handleMode);
+    }
+
+    for (const element of document.querySelectorAll(resetSelector)) {
+        element.addEventListener("click", handleReset);
+    }
+
+    element(textareaButtonSelector, "click", handleCustomPassageInput);
+
+    element(themeSelector, "click", handleTheme);
+}
+
+function initializeValues(
+    currentTest,
+    {
         inputSelector,
         textSelector,
-        {
-            dialogSelector,
-            dialogImageSelector,
-            dialogTitleSelector,
-            dialogSubtitleSelector,
-            dialogButtonSelector,
-        },
-        timeSelector,
-        resetSelector,
-        { wpm, accuracy, difficulty, mode },
-        pbWPMSelector,
+        wpmResultSelector,
+        accuracyResultSelector,
+        difficultyResultSelector,
+        modeResultSelector,
         accuracySelector,
         wpmSelector,
-        textareaButtonSelector,
+        pbWPMSelector,
+        dialogSelector,
+        dialogImageSelector,
+        dialogTitleSelector,
+        dialogSubtitleSelector,
+        dialogButtonSelector,
+        timeSelector,
+        resetSelector,
         textareaSelector,
         textareaInputSelector,
+        textareaButtonSelector,
         statusSelector,
-        listSelector,
         alertSelector,
+        listSelector,
         optionsSelector,
         themeSelector,
-    ] = selectors;
-    const passageInput = element(inputSelector);
-    const dialogElement = element(dialogSelector).element;
-    const passageText = element(textSelector).element;
+    },
+) {
     const accuracyElement = element(accuracySelector).element;
     const wpmElement = element(wpmSelector).element;
     const pbWPM = element(pbWPMSelector).element;
-    const textareaElement = element(textareaSelector).element;
-    const textareaInputElement = element(textareaInputSelector).element;
-    const statusElement = element(statusSelector).element;
     const alertElement = element(alertSelector).element;
-    const buttonThemeElement = element(themeSelector).element;
     const root = document.documentElement;
+    const buttonThemeElement = element(themeSelector).element;
+    const icon = buttonThemeElement.children[0];
+    const restartIcon = element("#restart-icon").element;
+    const toggleTheme = (theme, iconImageSource) => {
+        root.dataset.theme = theme;
+        icon.src = iconImageSource;
+        icon.classList.toggle("button__icon--white");
+        restartIcon.classList.toggle("button__icon--black");
+        localStorage.setItem("theme", theme);
+    };
     let handleInputEvent,
         timer,
         totalCharactersTyped,
         numberOfIncorrect,
         currentWordPosition;
-    pbWPM.textContent = currentTest.getPB();
-    const theme = localStorage.getItem("theme") ?? "dark";
-    if (theme === "light") {
-        buttonThemeElement.children[0].classList.remove("button__icon--white");
-        buttonThemeElement.children[0].src =
-            "./assets/images/sun-regular-full.svg";
-        document
-            .querySelector("#restart-icon")
-            .classList.toggle("button__icon--black");
-    }
-    document.querySelector("html").dataset.theme = theme;
-    function initializeNotExportedValues() {
-        for (const difficulty of ["easy", "medium", "hard", "custom"]) {
-            element(
-                `[data-difficulty="${difficulty}"]`,
-                "click",
-                difficulty === "custom"
-                    ? (event) => {
-                          changeActiveButton(
-                              ".button--active[data-difficulty]",
-                              "button--active",
-                              event.target,
-                          );
-                          textareaElement.classList.toggle("textarea--hidden");
-                      }
-                    : handleDifficulty,
-            );
+
+    function setup() {
+        if (localStorage.getItem("theme") === "light") {
+            toggleTheme("light", "./assets/images/sun-regular-full.svg");
         }
 
-        for (const mode of ["60", "45", "30", "15", "passage"]) {
-            element(`[data-mode="${mode}"]`, "click", handleMode);
-        }
+        pbWPM.textContent = currentTest.getPB();
 
-        for (const element of document.querySelectorAll(resetSelector)) {
-            element.addEventListener("click", () => {
-                reset();
-                dialogElement.close();
-            });
-        }
-
-        element(textareaButtonSelector, "click", () => {
-            const customPassage = DOMPurify.sanitize(
-                textareaInputElement.value.trim(),
-            );
-            if (customPassage.length > 0) {
-                textareaInputElement.value = "";
-                currentTest.setCustomPassage(customPassage);
-                currentTest.insertPassageWithCharacterSpan(passageText);
-                currentTest.setDifficulty("custom");
-            }
-            textareaElement.classList.toggle("textarea--hidden");
-        });
-
-        element(themeSelector, "click", () => {
-            const icon = buttonThemeElement.children[0];
-
-            if (root.dataset.theme === "dark") {
-                root.dataset.theme = "light";
-                icon.classList.remove("button__icon--white");
-                icon.src = "./assets/images/sun-regular-full.svg";
-                document
-                    .querySelector("#restart-icon")
-                    .classList.toggle("button__icon--black");
-
-                localStorage.setItem("theme", "light");
-            } else {
-                root.dataset.theme = "dark";
-                icon.classList.add("button__icon--white");
-                icon.src = "./assets/images/moon-solid-full.svg";
-                document
-                    .querySelector("#restart-icon")
-                    .classList.toggle("button__icon--black");
-
-                localStorage.setItem("theme", "dark");
-            }
-        });
+        initNotExport(resetSelector, textareaButtonSelector, themeSelector);
     }
 
-    initializeNotExportedValues();
+    setup();
 
     return {
-        initializePassageInput: () => {
-            ({
-                handleInputEvent,
-                timer,
-                totalCharactersTyped,
-                numberOfIncorrect,
-                currentWordPosition,
-            } = trackStats());
-            const abortController = passageInput.addListener(
-                "input",
-                handleInputEvent,
-            );
-            return {
-                passageInput: passageInput.element,
-                abortController,
-                handlerTimer: timer,
-                currentWordPosition,
+        initPassageInput: (() => {
+            const passageInput = element(inputSelector);
+            return () => {
+                ({
+                    handleInputEvent,
+                    timer,
+                    totalCharactersTyped,
+                    numberOfIncorrect,
+                    currentWordPosition,
+                } = trackStats());
+                const abortController = passageInput.addListener(
+                    "input",
+                    handleInputEvent,
+                );
+                return {
+                    passageInput: passageInput.element,
+                    abortController,
+                    handlerTimer: timer,
+                    currentWordPosition,
+                };
             };
+        })(),
+        passageText: element(textSelector).element,
+        resultOfTest: {
+            resultWPM: element(wpmResultSelector).element,
+            resultAccuracy: element(accuracyResultSelector).element,
+            resultDifficulty: element(difficultyResultSelector).element,
+            resultMode: element(modeResultSelector).element,
         },
-        passageText,
+        accuracyElement,
+        pbWPM,
         dialogElement: {
-            dialogElement,
+            dialogElement: element(dialogSelector).element,
             dialogImage: element(dialogImageSelector).element,
             dialogTitle: element(dialogTitleSelector).element,
             dialogSubtitle: element(dialogSubtitleSelector).element,
@@ -198,19 +195,13 @@ export function initializeValues(currentTest, ...selectors) {
                 timeElement,
             };
         })(),
-        resultOfTest: {
-            resultWPM: element(wpm).element,
-            resultAccuracy: element(accuracy).element,
-            resultDifficulty: element(difficulty).element,
-            resultMode: element(mode).element,
-        },
-        pbWPM,
-        accuracyElement,
-        wpmElement,
-        textareaElement,
-        statusElement,
-        listElement: element(listSelector).element,
+        textareaElement: element(textareaSelector).element,
+        textareaInputElement: element(textareaInputSelector).element,
+        statusElement: element(statusSelector).element,
         alertElement,
+        listElement: element(listSelector).element,
         optionsElement: element(optionsSelector).element,
+        toggleTheme,
+        rootElement: root,
     };
 }

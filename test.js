@@ -35,10 +35,7 @@ const encloseCharactersInSpan = (passage) => {
     return fragment;
 };
 
-export function typingSpeedTest(
-    defaultDifficulty = "easy",
-    defaultMode = "60",
-) {
+function typingSpeedTest(defaultDifficulty = "easy", defaultMode = "60") {
     let difficulty = defaultDifficulty;
     let singlePassage = generatePassage(difficulty, getEveryPassage);
     let wpm = 0;
@@ -46,6 +43,7 @@ export function typingSpeedTest(
     let mode = defaultMode;
     let numberOfPlays = localStorage.getItem("plays") ?? 0;
     let personalBest = localStorage.getItem("personalBest") ?? 0;
+    let isCustom = false;
 
     return {
         getEveryPassage: getEveryPassage,
@@ -109,6 +107,10 @@ export function typingSpeedTest(
         incrementPlays: () => ++numberOfPlays,
         getPB: () => personalBest,
         setPB: (pb) => (personalBest = pb),
+        isCustom: {
+            get: () => isCustom,
+            set: (custom) => (isCustom = custom),
+        },
         startTimer: (element, attribute) => {
             let request;
             let start = 0;
@@ -151,3 +153,5 @@ export function typingSpeedTest(
             element.replaceChildren(encloseCharactersInSpan(singlePassage)),
     };
 }
+
+export const currentTest = typingSpeedTest("easy", "60");

@@ -1,12 +1,14 @@
-import { typingSpeedTest } from "./test.js";
+import { currentTest } from "./test.js";
 import { element } from "./element.js";
-import { initializeValues } from "./initializestatvalues.js";
+import { targetElements } from "./initializestatvalues.js";
 import { controls } from "./controls.js";
 
-const currentTest = typingSpeedTest("easy", "60");
 const {
-    initializePassageInput,
+    initPassageInput,
     passageText,
+    resultOfTest: { resultWPM, resultAccuracy, resultDifficulty, resultMode },
+    accuracyElement,
+    pbWPM,
     dialogElement: {
         dialogElement,
         dialogImage,
@@ -15,48 +17,17 @@ const {
         dialogButton,
     },
     time: { timeElement },
-    resultOfTest: { resultWPM, resultAccuracy, resultDifficulty, resultMode },
-    pbWPM,
-    accuracyElement,
     textareaElement,
+    textareaInputElement,
     statusElement,
-    listElement,
     alertElement,
+    listElement,
     optionsElement,
-} = initializeValues(
-    currentTest,
-    "#passage",
-    ".test__passage",
-    {
-        dialogSelector: "dialog",
-        dialogImageSelector: "[data-image]",
-        dialogTitleSelector: ".dialog__title",
-        dialogSubtitleSelector: ".dialog__subtitle",
-        dialogButtonSelector: "dialog [data-type]",
-    },
-    "[role='timer']",
-    "[data-type='restart']",
-    {
-        wpm: "[data-result-wpm]",
-        accuracy: "[data-result-accuracy]",
-        difficulty: "[data-result-difficulty]",
-        mode: "[data-result-mode]",
-    },
-    ".personal-best__wpm",
-    "[data-accuracy]",
-    "[data-wpm]",
-    "[data-type='complete']",
-    ".textarea",
-    ".textarea__input",
-    "#status",
-    ".list-wrapper .list:first-child",
-    "#alert",
-    ".controls",
-    "[data-type='theme']",
-);
-
+    toggleTheme,
+    rootElement,
+} = targetElements;
 let { passageInput, abortController, handlerTimer, currentWordPosition } =
-    initializePassageInput();
+    initPassageInput();
 const controlsReset = controls(currentTest);
 
 function trackStats() {
@@ -180,18 +151,46 @@ function trackStats() {
     };
 }
 
+function handleReset() {
+    reset();
+    if (dialogElement.open) dialogElement.close();
+}
+
+function handleCustomPassageInput() {
+    const customPassage = DOMPurify.sanitize(textareaInputElement.value.trim());
+    if (customPassage.length > 0) {
+        textareaInputElement.value = "";
+        currentTest.setCustomPassage(customPassage);
+        currentTest.insertPassageWithCharacterSpan(passageText);
+        currentTest.isCustom.set(true);
+    }
+    if (currentTest.isCustom.get()) {
+        textareaElement.classList.toggle("textarea--hidden");
+    } else {
+        reset();
+    }
+}
+
 function handleDifficulty(event) {
+    const difficulty = currentTest.setDifficulty(
+        event.target.attributes["data-difficulty"].value,
+    );
     changeActiveButton(
         ".button--active[data-difficulty]",
         "button--active",
         event.target,
     );
-    currentTest.setSinglePassage(
-        currentTest.setDifficulty(
-            event.target.attributes["data-difficulty"].value,
-        ),
-    );
-    reset();
+    if (difficulty === "custom") {
+        textareaElement.classList.toggle("textarea--hidden");
+        if (
+            textareaElement.classList.contains("textarea--hidden") &&
+            !currentTest.isCustom.get()
+        ) {
+            reset();
+        }
+    } else {
+        reset();
+    }
 }
 
 function handleMode(event) {
@@ -204,12 +203,20 @@ function handleMode(event) {
     reset();
 }
 
+function handleTheme() {
+    if (rootElement.dataset.theme === "dark") {
+        toggleTheme("light", "./assets/images/sun-regular-full.svg");
+    } else {
+        toggleTheme("dark", "./assets/images/moon-solid-full.svg");
+    }
+}
+
 function changeActiveButton(
     activeButtonSelector,
     activeButtonClass,
     addToElement,
 ) {
-    const { element: activeButton } = element(activeButtonSelector);
+    const activeButton = element(activeButtonSelector).element;
     activeButton.classList.remove(activeButtonClass);
     addToElement.classList.add(activeButtonClass);
 }
@@ -228,6 +235,7 @@ function reset() {
             ? currentTest.setDifficulty("easy")
             : currentTest.getDifficulty(),
     );
+    currentTest.isCustom.set(false);
     changeActiveButton(
         ".button--active[data-difficulty]",
         "button--active",
@@ -239,7 +247,7 @@ function reset() {
     currentTest.setAccuracy(100, 0, accuracyElement);
     abortController();
     ({ abortController, handlerTimer, currentWordPosition } =
-        initializePassageInput());
+        initPassageInput());
     controlsReset.reset();
     statusElement.textContent = `New passage set. Difficulty: ${currentTest.getDifficulty()}. Time mode: ${
         currentMode === "0" ? "passage" : currentMode + "seconds"
@@ -247,7 +255,6 @@ function reset() {
 }
 
 function showResults() {
-    alertElement.textContent = "";
     if (currentTest.getWPM() > currentTest.getPB()) {
         if (currentTest.getPlays() !== 0) {
             dialogViewChange(
@@ -286,7 +293,7 @@ function showResults() {
         resultMode.setAttribute("datetime", `PT${currentTest.getMode()}S`);
     }
     dialogElement.showModal();
-    document.querySelector("dialog ul").focus();
+    document.querySelector(".dialog ul").focus();
     reset();
 }
 
@@ -310,16 +317,16 @@ function dialogViewChange(
 }
 
 export {
-    currentTest,
     passageText,
+    passageInput,
+    statusElement,
     trackStats,
-    handleDifficulty,
-    handleMode,
     reset,
     showResults,
-    changeActiveButton,
-    handlerTimer,
-    statusElement,
     currentWordPosition,
-    passageInput,
+    handleDifficulty,
+    handleMode,
+    handleCustomPassageInput,
+    handleReset,
+    handleTheme,
 };
