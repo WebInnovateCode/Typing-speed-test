@@ -51,7 +51,7 @@ const {
     "#status",
     ".list-wrapper .list:first-child",
     "#alert",
-    ".keyboard-options",
+    ".controls",
     "[data-type='theme']",
 );
 
@@ -105,7 +105,7 @@ function trackStats() {
         if (timer.startTime() === 0) {
             listElement.classList.add("list--hidden");
             textareaElement.classList.add("textarea--hidden");
-            optionsElement.classList.add("keyboard-options--hidden");
+            optionsElement.classList.add("controls--hidden");
             passage = currentTest.getCurrentPassage();
             words = passage.split(" ");
             timer.start();
@@ -219,7 +219,7 @@ function reset() {
     if (handlerTimer.startTime() !== 0) handlerTimer.stop();
     textareaElement.classList.add("textarea--hidden");
     listElement.classList.remove("list--hidden");
-    optionsElement.classList.remove("keyboard-options--hidden");
+    optionsElement.classList.remove("controls--hidden");
     timeElement.classList.remove("list__item-value--yellow");
     accuracyElement.classList.remove("list__item-value--red");
     timeElement.textContent = currentMode + "s";

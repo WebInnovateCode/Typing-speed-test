@@ -41,7 +41,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex">
+                <div class="flex flex--col-gap">
                     <div class="personal-best">
                         <img
                             src="./assets/images/icon-personal-best.svg"
@@ -263,6 +263,32 @@
                         </button>
                     </div>
                 </section>
+                <div class="controls">
+                    <ul class="list list--col-gap">
+                        <li class="list__item--row list__item--col-gap">
+                            <kbd class="controls__key">esc</kbd>
+                            <span class="controls__value"
+                                >begin test reading</span
+                            >
+                        </li>
+                        <li class="list__item--row list__item--col-gap">
+                            <kbd class="controls__key">&darr;</kbd>
+                            <span class="controls__value">current word</span>
+                        </li>
+                        <li class="list__item--row list__item--col-gap">
+                            <kbd class="controls__key">&uarr;</kbd>
+                            <span class="controls__value">next word</span>
+                        </li>
+                    </ul>
+                    <p class="note">* Screen reader users only</p>
+                </div>
+                <div id="status" role="status" class="sr-only"></div>
+                <div
+                    id="alert"
+                    class="sr-only"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                ></div>
                 <dialog class="dialog dialog--default">
                     <img
                         src="./assets/images/icon-completed.svg"
@@ -323,36 +349,6 @@
                         />
                     </button>
                 </dialog>
-                <div id="status" role="status" class="sr-only"></div>
-                <div
-                    id="alert"
-                    class="sr-only"
-                    aria-live="assertive"
-                    aria-atomic="true"
-                ></div>
-                <div class="keyboard-options">
-                    <ul class="list list--col-gap">
-                        <li
-                            class="list__item--row list__item--col-gap list__item--sm"
-                        >
-                            <kbd class="shortcut">esc</kbd>
-                            begin test reading
-                        </li>
-                        <li
-                            class="list__item--row list__item--col-gap list__item--sm"
-                        >
-                            <kbd class="shortcut">&darr;</kbd>
-                            current word
-                        </li>
-                        <li
-                            class="list__item--row list__item--col-gap list__item--sm"
-                        >
-                            <kbd class="shortcut">&uarr;</kbd>
-                            next word
-                        </li>
-                    </ul>
-                    <p class="note">* Screen reader users only</p>
-                </div>
             </main>
             <footer class="footer">
                 <div class="attribution">
