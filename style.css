@@ -53,6 +53,10 @@
         z-index: 1;
     }
 
+    .default-wrapper {
+        margin: var(--section-spacing);
+    }
+
     .backdrop-blur {
         position: fixed;
         inset: 0;
@@ -211,7 +215,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: var(--section-spacing);
     }
 
     .list {
@@ -407,7 +410,6 @@
 @layer test {
     .test {
         display: grid;
-        margin: 0.5rem var(--section-spacing-sides);
         grid-template-areas: "overlay";
         line-height: 1.6;
         height: 3lh;
@@ -454,12 +456,9 @@
         -moz-user-select: none;
         outline: none;
     }
-}
 
-@layer restart {
     .restart {
-        padding: 1rem 0;
-        margin: var(--section-spacing);
+        margin-top: clamp(2rem, 1.71rem + 1.43vw, 3rem);
     }
 }
 

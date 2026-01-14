@@ -55,7 +55,12 @@
                         </span>
                         <span class="personal-best__wpm">40</span>WPM
                     </div>
-                    <button class="button" type="button" data-type="theme">
+                    <button
+                        class="button"
+                        type="button"
+                        data-type="theme"
+                        aria-label="Light and dark mode toggle"
+                    >
                         <img
                             class="button__icon button__icon--white"
                             src="./assets/images/moon-solid-full.svg"
@@ -65,7 +70,7 @@
                 </div>
             </header>
             <main class="flex flex--col flex--grow stack-top">
-                <section aria-labelledby="live-stats">
+                <section class="default-wrapper" aria-labelledby="live-stats">
                     <h2 id="live-stats" class="sr-only">Live Stats</h2>
                     <div class="list-wrapper">
                         <ul class="list list--col-gap">
@@ -226,7 +231,7 @@
                         </ul>
                     </div>
                 </section>
-                <section aria-labelledby="take-test">
+                <section class="default-wrapper" aria-labelledby="take-test">
                     <h2 id="take-test" class="sr-only">Take Test</h2>
                     <div class="test">
                         <div class="test__passage"></div>
@@ -242,11 +247,6 @@
                             ></textarea>
                         </div>
                     </div>
-                </section>
-                <section aria-labelledby="restart">
-                    <h2 id="restart" class="sr-only">
-                        Restart Typing Speed Test
-                    </h2>
                     <div class="restart">
                         <button
                             type="button"
@@ -263,25 +263,32 @@
                         </button>
                     </div>
                 </section>
-                <div class="controls">
-                    <ul class="list list--col-gap">
-                        <li class="list__item--row list__item--col-gap">
-                            <kbd class="controls__key">esc</kbd>
-                            <span class="controls__value"
-                                >begin test reading</span
-                            >
-                        </li>
-                        <li class="list__item--row list__item--col-gap">
-                            <kbd class="controls__key">&darr;</kbd>
-                            <span class="controls__value">current word</span>
-                        </li>
-                        <li class="list__item--row list__item--col-gap">
-                            <kbd class="controls__key">&uarr;</kbd>
-                            <span class="controls__value">next word</span>
-                        </li>
-                    </ul>
-                    <p class="note">* Screen reader users only</p>
-                </div>
+                <section class="default-wrapper" aria-labelledby="controls">
+                    <h2 id="controls" class="sr-only">
+                        Accessibility Controls
+                    </h2>
+                    <div class="controls">
+                        <ul class="list list--col-gap">
+                            <li class="list__item--row list__item--col-gap">
+                                <kbd class="controls__key">esc</kbd>
+                                <span class="controls__value"
+                                    >begin test reading</span
+                                >
+                            </li>
+                            <li class="list__item--row list__item--col-gap">
+                                <kbd class="controls__key">&darr;</kbd>
+                                <span class="controls__value"
+                                    >current word</span
+                                >
+                            </li>
+                            <li class="list__item--row list__item--col-gap">
+                                <kbd class="controls__key">&uarr;</kbd>
+                                <span class="controls__value">next word</span>
+                            </li>
+                        </ul>
+                        <p class="note">* Screen reader users only</p>
+                    </div>
+                </section>
                 <div id="status" role="status" class="sr-only"></div>
                 <div
                     id="alert"

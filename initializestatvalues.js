@@ -45,6 +45,7 @@ export function initializeValues(currentTest, ...selectors) {
     const statusElement = element(statusSelector).element;
     const alertElement = element(alertSelector).element;
     const buttonThemeElement = element(themeSelector).element;
+    const root = document.documentElement;
     let handleInputEvent,
         timer,
         totalCharactersTyped,
@@ -103,35 +104,22 @@ export function initializeValues(currentTest, ...selectors) {
             textareaElement.classList.toggle("textarea--hidden");
         });
 
-        element(themeSelector, "click", (event) => {
-            if (
-                document.querySelector("html").getAttribute("data-theme") ===
-                "dark"
-            ) {
-                document
-                    .querySelector("html")
-                    .setAttribute("data-theme", "light");
+        element(themeSelector, "click", () => {
+            const icon = buttonThemeElement.children[0];
 
-                buttonThemeElement.children[0].classList.remove(
-                    "button__icon--white",
-                );
-                buttonThemeElement.children[0].src =
-                    "./assets/images/sun-regular-full.svg";
+            if (root.dataset.theme === "dark") {
+                root.dataset.theme = "light";
+                icon.classList.remove("button__icon--white");
+                icon.src = "./assets/images/sun-regular-full.svg";
                 document
                     .querySelector("#restart-icon")
                     .classList.toggle("button__icon--black");
 
                 localStorage.setItem("theme", "light");
             } else {
-                document
-                    .querySelector("html")
-                    .setAttribute("data-theme", "dark");
-
-                buttonThemeElement.children[0].classList.add(
-                    "button__icon--white",
-                );
-                buttonThemeElement.children[0].src =
-                    "./assets/images/moon-solid-full.svg";
+                root.dataset.theme = "dark";
+                icon.classList.add("button__icon--white");
+                icon.src = "./assets/images/moon-solid-full.svg";
                 document
                     .querySelector("#restart-icon")
                     .classList.toggle("button__icon--black");
