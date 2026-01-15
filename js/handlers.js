@@ -245,6 +245,7 @@ function reset() {
     optionsElement.classList.remove("controls--hidden");
     timeElement.classList.remove("list__item-value--yellow");
     accuracyElement.classList.remove("list__item-value--red");
+    passageInput.value = "";
     timeElement.textContent = currentMode + "s";
     currentTest.setSinglePassage(
         currentTest.getDifficulty() === "custom"
