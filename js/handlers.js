@@ -185,11 +185,8 @@ function handleDifficulty(event) {
     if (difficulty === "custom") {
         textareaElement.classList.toggle("textarea--hidden");
         toggleAriaExpanded();
-        if (
-            textareaElement.classList.contains("textarea--hidden") &&
-            !currentTest.isCustom.get()
-        ) {
-            reset();
+        if (textareaElement.classList.contains("textarea--hidden")) {
+            if (!currentTest.isCustom.get()) reset();
         } else {
             textareaInputElement.focus();
         }

@@ -34,6 +34,8 @@ Build a responsive typing speed test that calculates words per minute (WPM) and 
 -   Responsive design (clamp, flexbox, media)
 -   ARIA (roles, status, aria-live)
 -   JavaScript modules, factory functions, fetch
+-   Accessibility (aria, keyboard shortcut, easy navigation)
+-   Toggle light and dark mode
 
 ### Features
 
@@ -42,6 +44,9 @@ Build a responsive typing speed test that calculates words per minute (WPM) and 
 -   Set custom passage
 -   Live WPM and accuracy caculation
 -   Live input feedback
+-   Accessibility (controls, status update, aria)
+-   Distraction less typing
+-   Light and dark mode
 
 ### Useful resources
 
