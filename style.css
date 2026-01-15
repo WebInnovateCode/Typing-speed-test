@@ -1,8 +1,5 @@
 @layer {
     :root {
-        --color-inaccurate: hsl(354, 63%, 57%);
-        --color-accurate: hsl(140, 63%, 57%);
-        --color-complementary: hsl(49, 85%, 70%);
         --font-family: "Sora", Verdana, Geneva, Tahoma, sans-serif;
         --font-weight-heavy: 700;
         --font-size-sm: clamp(0.9rem, 1.03rem + -0.14vw, 1rem);
@@ -20,6 +17,9 @@
         --color-text-primary: hsl(180, 8%, 74%);
         --color-inverse: hsl(0, 0%, 100%);
         --color-accent: hsl(0, 87%, 94%);
+        --color-inaccurate: hsl(354, 63%, 57%);
+        --color-accurate: hsl(140, 63%, 57%);
+        --color-complementary: hsl(49, 85%, 70%);
     }
 
     [data-theme="light"] {
@@ -27,7 +27,10 @@
         --color-background-primary: hsl(var(--background-primary));
         --color-text-primary: hsl(180, 2%, 25%);
         --color-inverse: hsl(0, 0%, 0%);
-        --color-accent: hsl(0, 38.3%, 76.5%);
+        --color-accent: hsl(0, 71%, 30%);
+        --color-inaccurate: hsl(0, 66%, 37%);
+        --color-accurate: hsl(103, 44%, 32%);
+        --color-complementary: hsl(53, 51%, 28%);
     }
 
     body {
@@ -374,6 +377,15 @@
         }
         &:hover .button__icon {
             filter: brightness(0);
+        }
+    }
+
+    [data-theme="light"] .button--restart {
+        &:hover {
+            color: hsl(0, 0%, 100%);
+        }
+        &:hover .button__icon {
+            filter: brightness(1);
         }
     }
 
