@@ -62,4 +62,3 @@ Build a responsive typing speed test that calculates words per minute (WPM) and 
 ## Author
 
 -   Website - [Marc Mansour](https://webinnovatecode.github.io/Typing-speed-test)
--   Frontend Mentor - [@WebInnovateCode](https://www.frontendmentor.io/profile/WebInnovateCode)
