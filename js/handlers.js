@@ -101,7 +101,7 @@ function trackStats() {
                         .width - 5;
                 currentWord = wordCount;
             }
-            if (lineWidth > passageWidth) {
+            if (lineWidth >= passageWidth) {
                 lineWidth =
                     passageText.children[wordCount].getBoundingClientRect()
                         .width;
