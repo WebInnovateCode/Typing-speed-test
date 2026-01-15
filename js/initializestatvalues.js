@@ -35,6 +35,7 @@ export const targetElements = initializeValues(currentTest, {
     listSelector: ".list-wrapper .list:first-child",
     optionsSelector: ".controls",
     themeSelector: "[data-type='theme']",
+    customSelector: "[data-difficulty='custom'",
 });
 
 function initNotExport(resetSelector, textareaButtonSelector, themeSelector) {
@@ -49,8 +50,6 @@ function initNotExport(resetSelector, textareaButtonSelector, themeSelector) {
     for (const element of document.querySelectorAll(resetSelector)) {
         element.addEventListener("click", handleReset);
     }
-
-    element(textareaButtonSelector, "click", handleCustomPassageInput);
 
     element(themeSelector, "click", handleTheme);
 }
@@ -82,11 +81,17 @@ function initializeValues(
         listSelector,
         optionsSelector,
         themeSelector,
+        customSelector,
     },
 ) {
     const accuracyElement = element(accuracySelector).element;
     const wpmElement = element(wpmSelector).element;
     const pbWPM = element(pbWPMSelector).element;
+    const textareaButtonElement = element(
+        textareaButtonSelector,
+        "click",
+        handleCustomPassageInput,
+    ).element;
     const alertElement = element(alertSelector).element;
     const root = document.documentElement;
     const buttonThemeElement = element(themeSelector).element;
@@ -95,6 +100,7 @@ function initializeValues(
     const toggleTheme = (theme, iconImageSource) => {
         root.dataset.theme = theme;
         icon.src = iconImageSource;
+        icon.alt = theme + " mode";
         icon.classList.toggle("button__icon--white");
         restartIcon.classList.toggle("button__icon--black");
         localStorage.setItem("theme", theme);
@@ -197,10 +203,12 @@ function initializeValues(
         })(),
         textareaElement: element(textareaSelector).element,
         textareaInputElement: element(textareaInputSelector).element,
+        textareaButtonElement,
         statusElement: element(statusSelector).element,
         alertElement,
         listElement: element(listSelector).element,
         optionsElement: element(optionsSelector).element,
+        buttonCustomElement: element(customSelector).element,
         toggleTheme,
         rootElement: root,
     };

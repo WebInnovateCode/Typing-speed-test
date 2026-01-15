@@ -19,10 +19,12 @@ const {
     time: { timeElement },
     textareaElement,
     textareaInputElement,
+    textareaButtonElement,
     statusElement,
     alertElement,
     listElement,
     optionsElement,
+    buttonCustomElement,
     toggleTheme,
     rootElement,
 } = targetElements;
@@ -99,7 +101,7 @@ function trackStats() {
                         .width - 5;
                 currentWord = wordCount;
             }
-            if (lineWidth >= passageWidth) {
+            if (lineWidth > passageWidth) {
                 lineWidth =
                     passageText.children[wordCount].getBoundingClientRect()
                         .width;
@@ -164,11 +166,11 @@ function handleCustomPassageInput() {
         currentTest.insertPassageWithCharacterSpan(passageText);
         currentTest.isCustom.set(true);
     }
-    if (currentTest.isCustom.get()) {
-        textareaElement.classList.toggle("textarea--hidden");
-    } else {
+    if (!currentTest.isCustom.get()) {
         reset();
     }
+    textareaElement.classList.toggle("textarea--hidden");
+    toggleAriaExpanded();
 }
 
 function handleDifficulty(event) {
@@ -182,11 +184,14 @@ function handleDifficulty(event) {
     );
     if (difficulty === "custom") {
         textareaElement.classList.toggle("textarea--hidden");
+        toggleAriaExpanded();
         if (
             textareaElement.classList.contains("textarea--hidden") &&
             !currentTest.isCustom.get()
         ) {
             reset();
+        } else {
+            textareaInputElement.focus();
         }
     } else {
         reset();
@@ -206,8 +211,20 @@ function handleMode(event) {
 function handleTheme() {
     if (rootElement.dataset.theme === "dark") {
         toggleTheme("light", "./assets/images/sun-regular-full.svg");
+        statusElement.textContent = "Light mode activated";
     } else {
         toggleTheme("dark", "./assets/images/moon-solid-full.svg");
+        statusElement.textContent = "Dark mode activated";
+    }
+}
+
+function toggleAriaExpanded() {
+    if (buttonCustomElement.getAttribute("aria-expanded") === "true") {
+        buttonCustomElement.setAttribute("aria-expanded", "false");
+        textareaButtonElement.setAttribute("aria-expanded", "false");
+    } else {
+        buttonCustomElement.setAttribute("aria-expanded", "true");
+        textareaButtonElement.setAttribute("aria-expanded", "true");
     }
 }
 
@@ -224,7 +241,6 @@ function changeActiveButton(
 function reset() {
     const currentMode = currentTest.getMode();
     if (handlerTimer.startTime() !== 0) handlerTimer.stop();
-    textareaElement.classList.add("textarea--hidden");
     listElement.classList.remove("list--hidden");
     optionsElement.classList.remove("controls--hidden");
     timeElement.classList.remove("list__item-value--yellow");

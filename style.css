@@ -426,6 +426,7 @@
         height: fit-content;
         filter: blur(5px);
         transition: filter 0.3s ease-in;
+        white-space-collapse: preserve-spaces;
     }
 
     :has(.test__input:focus, .dialog[open]) .test__passage {
@@ -433,7 +434,7 @@
     }
 
     .test__whitespace {
-        padding: 0 0.5rem;
+        padding: 0 5px;
     }
 
     .test__grid-item {

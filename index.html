@@ -112,6 +112,8 @@
                                             class="button"
                                             type="button"
                                             data-difficulty="custom"
+                                            aria-controls="textarea"
+                                            aria-expanded="false"
                                         >
                                             Custom
                                         </button>
@@ -172,7 +174,7 @@
                                 </ul>
                             </li>
                         </ul>
-                        <div class="textarea textarea--hidden">
+                        <div id="textarea" class="textarea textarea--hidden">
                             <label for="custom-passage" class="sr-only">
                                 Custom Passage
                             </label>
@@ -186,6 +188,8 @@
                                 type="button"
                                 class="button button--restart"
                                 data-type="complete"
+                                aria-controls="textarea"
+                                aria-expanded="false"
                             >
                                 Done
                             </button>
