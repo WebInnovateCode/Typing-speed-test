@@ -240,7 +240,7 @@ function changeActiveButton(
 
 function reset() {
     const currentMode = currentTest.getMode();
-    if (handlerTimer.startTime() !== 0) handlerTimer.stop();
+    handlerTimer.stop();
     listElement.classList.remove("list--hidden");
     optionsElement.classList.remove("controls--hidden");
     timeElement.classList.remove("list__item-value--yellow");
